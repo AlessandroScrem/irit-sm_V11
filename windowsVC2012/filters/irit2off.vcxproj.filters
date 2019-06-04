@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{3c51c8c5-ca2e-4c66-a349-e1a23af23df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5f00a384-928c-41a9-94e2-884c969ea69a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reseource Files">
+      <UniqueIdentifier>{a14bd7fd-0049-41a5-b4fd-57b4aa596372}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\filters\irit2off.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

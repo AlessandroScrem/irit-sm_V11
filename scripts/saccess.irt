@@ -1,0 +1,115 @@
+#
+# Examples of surface accessibility analysis.
+#
+#				Gershon Elber, December 1999
+#
+
+EvalOneSaccessPllns = function( Srf, Plls, CreatePlln ): i: Pt:
+    if ( thisobj("Plls") == ctlpt_type,
+	return = seval( Srf, coord( Plls, 1 ), coord( Plls, 2 ) ):
+        color( return, blue ),
+	return = nil():
+	for ( i = 1, 1, sizeof( Plls ),
+ 	    Pt = nth( Plls, i ):
+	    snoc( seval( Srf, coord( Pt, 1 ), coord( Pt, 2 ) ), return ) ):
+	if ( CreatePlln,
+	    return = poly( return, true ) ) );
+
+EvalSaccessPllns = function( Srfs, Plls, CreatePlln ): i:
+    if ( sizeof( Plls ) == 1,
+	return = EvalOneSaccessPllns( Srfs, Plls, CreatePlln ),
+	return = nil():
+	for ( i = 1, 1, sizeof( Plls ),
+	    snoc( EvalOneSaccessPllns( Srfs, nth( Plls, i ), CreatePlln ),
+	          return ) ) );
+
+#############################################################################
+#
+# Plane surface - sphere check surface example.
+#
+
+c = cregion( pcircle( vector( 0, 0, 0 ), 1 ), 0.001, 1.999 ) * ry( 90 );
+
+pSphere = surfPRev( c ) * sc( 0.3 ) * rx( 32 ) * ry( 34 ) * rz( 45 ) * tz( 1 );
+color( pSphere, yellow );
+
+Pln = ruledSrf( ctlpt( E3, -1, -1, 0 ) + ctlpt( E3, -1,  1, 0 ),
+		ctlpt( E3,  1, -1, 0 ) + ctlpt( E3,  1,  1, 0 ) );
+color( Pln, red );
+
+Pllns = sAccess( Pln, 0, pSphere, 0.001, 1e-6 );
+
+sPllns = EvalOneSaccessPllns( Pln, nth( Pllns, 1 ), true );
+
+All = list( pSphere, Pln, sPllns );
+
+interact( All );
+
+save( "saccess1", All );
+
+#############################################################################
+#
+# Sphere surface - sphere check surface example.
+#
+
+PosSrf = pSphere * sc( 2 );
+color( PosSrf, red );
+
+Pllns = sAccess( PosSrf, 0, pSphere, 0.01, 1e-5 );
+
+sPllns = EvalSaccessPllns( PosSrf, Pllns, true );
+
+All = list( pSphere, PosSrf, sPllns ) * tz( -1.6 );
+
+interact( All );
+
+save( "saccess2", All );
+
+#############################################################################
+#
+# Cuboid surface - sphere check surface example.
+#
+
+RSquare = cbspline( 3,
+		    list( ctlpt( E3, -1.0,  0.8, 0.0 ),
+			  ctlpt( E3, -0.8,  1.0, 0.0 ),
+			  ctlpt( E3,  0.8,  1.0, 0.0 ),
+			  ctlpt( E3,  1.0,  0.8, 0.0 ),
+			  ctlpt( E3,  1.0, -0.8, 0.0 ),
+			  ctlpt( E3,  0.8, -1.0, 0.0 ),
+			  ctlpt( E3, -0.8, -1.0, 0.0 ),
+			  ctlpt( E3, -1.0, -0.8, 0.0 ) ),
+		    list( kv_periodic ) );
+RSquare = cregion( coerce( RSquare, kv_open ), 0.0, 0.5 );
+
+Cuboid = sFromCrvs( list( RSquare * sc( 1.0 )   * tz(  0.0 ),
+			  RSquare * sc( 1.0 )   * tz(  0.8 ),
+			  RSquare * sc( 0.8 )   * tz(  1.0 ),
+			  RSquare * sc( 0.002 ) * tz(  1.0 ) ),
+		    3, kv_open );
+color( Cuboid, red );
+
+CheckSrf = pSphere * tz( -0.8 );
+
+Pllns = sAccess( Cuboid, 0, CheckSrf, 0.0025, 1e-5 );
+
+sPllns = EvalSaccessPllns( Cuboid, Pllns, true );
+
+All = list( CheckSrf, Cuboid, sPllns );
+
+interact( All );
+
+save( "saccess3", All );
+
+#################################
+
+free( All );
+free( Pllns );
+free( sPllns );
+free( Cuboid );
+free( CheckSrf );
+free( RSquare );
+free( PosSrf );
+free( pSphere );
+free( Pln );
+free( c );

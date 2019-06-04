@@ -1,0 +1,299 @@
+#
+# Curve Curve Intersection properties.
+#
+
+view_mat2 = sc( 1 );
+viewobj( view_mat2 );
+
+#######################################################
+
+view_mat2 = sc( 0.5 ) * ty( 0.5 );
+viewobj( view_mat2 );
+
+c1 = cbspline( 2,
+    list( ctlpt( E3, -2, 0, 0. ),
+          ctlpt( E2, 0., -2 ),
+          ctlpt( E2, 2, 0 ) ),
+    list( kv_open ) );
+c2 = cbspline( 2,
+    list( ctlpt( E3, 2, -2, 0. ),
+          ctlpt( E2, 0, 0 ),
+          ctlpt( E2, -2, -2 ) ),
+    list( kv_open ) );
+
+ip = CCintrProp( c1, c2, 1e-8 );
+printf( "Number of intersection loops = %d\\n", list( sizeof( ip ) - 1 ) );
+
+inter = nth( ip, 2 );
+color( inter, red );
+adwidth( inter, 3 );
+
+printf( "Area = %f\\n", list( GetAttr( Inter, "Area" ) ) );
+
+interact( list( c1, c2, inter ) );
+
+#################################
+
+view_mat2 = sc( 0.5 );
+viewobj( view_mat2 );
+
+c1 = cbspline( 4,
+    list( ctlpt( E3, 1., 0., 0. ),
+          ctlpt( E2, 1., 0.5523 ),
+          ctlpt( E2, 0.5523, 1. ),
+          ctlpt( E2, -0.5523, 1. ),
+          ctlpt( E2, -1., 0.5523 ),
+          ctlpt( E2, -1., -0.5523 ),
+          ctlpt( E2, -0.5523, -1. ),
+          ctlpt( E2, 0.5523, -1. ),
+          ctlpt( E2, 1., -0.5523 ),
+          ctlpt( E1, 1. ) ),
+    list( 0., 0., 0., 0., 1., 1., 2., 2., 3., 3., 4., 4., 4., 4. ) );
+c2 = cbezier(
+    list( ctlpt( E3, -1.4142, -1.4142, 0. ),
+          ctlpt( E2, 1.4142, 1.4142 ) ) );
+
+ip = CCintrProp( c1, c2, 1e-8 );
+printf( "Number of intersection loops = %d\\n", list( sizeof( ip ) - 1 ) );
+
+inter = nth( ip, 2 );
+color( inter, red );
+adwidth( inter, 3 );
+
+printf( "Area = %f\\n", list( GetAttr( Inter, "Area" ) ) );
+
+All = list( c1, c2, inter );
+
+interact( All );
+
+save( "cci1prop", All );
+
+#################################
+
+view_mat2 = sc( 0.2 ) * ty( -0.2 );
+viewobj( view_mat2 );
+
+c1 = cbspline( 3,
+    list( ctlpt( E3, 2.0018, 4.9791, 0. ),
+          ctlpt( E2, 4.452, 0.4139 ),
+          ctlpt( E2, -5.4748, 0.4841 ),
+          ctlpt( E2, -3.0089, 4.951 ) ),
+    list( kv_open ) );
+c2 = cbspline( 3,
+    list( ctlpt( E3, -3.0247, -1.9861, 0. ),
+          ctlpt( E2, -5.4748, 2.5791 ),
+          ctlpt( E2, 4.452, 2.5089 ),
+          ctlpt( E2, 1.9861, -1.958 ) ),
+    list( kv_open ) );
+
+ip = CCintrProp( c1, c2, 1e-8 );
+printf( "Number of intersection loops = %d\\n", list( sizeof( ip ) - 1 ) );
+
+inter = nth( ip, 2 );
+color( inter, red );
+adwidth( inter, 3 );
+
+printf( "Area = %f\\n", list( GetAttr( Inter, "Area" ) ) );
+
+All = list( c1, c2, inter );
+
+interact( All );
+
+save( "cci2prop", All );
+
+#################################
+
+view_mat2 = sc( 0.2 ) * ty( 0.3 );
+viewobj( view_mat2 );
+
+c1 = cbspline( 2,
+    list( ctlpt( E3, 4., -3., 0. ),
+          ctlpt( E2, 2., -1. ),
+          ctlpt( E2, 0., -3. ),
+          ctlpt( E2, -2., -1. ),
+          ctlpt( E2, -4., -3. ) ),
+    list( kv_open ) );
+c2 = cbspline( 2,
+    list( ctlpt( E3, -4., -1., 0. ),
+          ctlpt( E2, -2., -3. ),
+          ctlpt( E2, 0., -1. ),
+          ctlpt( E2, 2., -3. ),
+          ctlpt( E2, 4., -1. ) ),
+    list( kv_open ) );
+
+ip = CCintrProp( c1, c2, 1e-8 );
+printf( "Number of intersection loops = %d\\n", list( sizeof( ip ) - 1 ) );
+
+inter = list( nth( ip, 2 ), nth( ip, 3 ) );
+color( inter, red );
+adwidth( inter, 3 );
+
+printf( "Area = (%f, %f)\\n", list( GetAttr( nth( ip, 2 ), "Area" ),
+				    GetAttr( nth( ip, 3 ), "Area" ) ) );
+
+All = list( c1, c2, inter );
+
+interact( All );
+
+save( "cci3prop", All );
+
+#################################
+
+view_mat2 = sc( 0.3 ) * ty( -0.2 );
+viewobj( view_mat2 );
+
+c1 = cbspline( 4,
+    list( ctlpt( E3, -2.921, -0.2957, 0. ),
+          ctlpt( E2, -2.4402, -1.2055 ),
+          ctlpt( E2, -1.4524, -0.6661 ),
+          ctlpt( E2, -0.991, 0.2697 ),
+          ctlpt( E2, -0.4841, 0.3282 ),
+          ctlpt( E2, 0.5361, -0.3477 ),
+          ctlpt( E2, 1.4979, -1.0105 ),
+          ctlpt( E2, 2.2127, -0.874 ),
+          ctlpt( E2, 2.5636, 0.0227 ),
+          ctlpt( E2, 1.7058, 1.199 ),
+          ctlpt( E2, 0.6661, 1.4329 ),
+          ctlpt( E2, 0.8091, 1.7383 ),
+          ctlpt( E2, 1.4784, 1.9138 ),
+          ctlpt( E2, 2.1477, 1.5824 ),
+          ctlpt( E2, 2.7651, 1.8358 ) ),
+    list( kv_open ) );
+c2 = cbspline( 4,
+    list( ctlpt( E3, 2.6806, 1.4264, 0. ),
+          ctlpt( E2, 2.1672, 1.9463 ),
+          ctlpt( E2, 2.1022, 1.4654 ),
+          ctlpt( E2, 0.5946, 1.8618 ),
+          ctlpt( E2, 0.3022, 1.2964 ),
+          ctlpt( E2, 0.7896, 0.8415 ),
+          ctlpt( E2, 2.3687, 0.8415 ),
+          ctlpt( E2, 2.8106, 0.3022 ),
+          ctlpt( E2, 2.6871, -0.4191 ),
+          ctlpt( E2, 1.9723, -0.2892 ),
+          ctlpt( E2, 1.2314, -0.1722 ),
+          ctlpt( E2, 0.5621, -0.5426 ),
+          ctlpt( E2, -0.0552, -1.1145 ),
+          ctlpt( E2, -0.5881, -0.7831 ),
+          ctlpt( E2, -1.4979, 0.0032 ),
+          ctlpt( E2, -2.1087, 0.0162 ),
+          ctlpt( E2, -2.8886, -0.7766 ) ),
+    list( kv_open ) );
+
+ip = CCintrProp( c1, c2, 1e-8 );
+printf( "Number of intersection loops = %d\\n", list( sizeof( ip ) - 1 ) );
+
+inter = list( nth( ip, 2 ), nth( ip, 3 ), nth( ip, 4 ), nth( ip, 5 ) );
+color( inter, red );
+adwidth( inter, 3 );
+
+All = list( c1, c2, inter );
+
+printf( "Area = (%f, %f, %f, %f)\\n", list( GetAttr( nth( ip, 2 ), "Area" ),
+				            GetAttr( nth( ip, 3 ), "Area" ),
+				            GetAttr( nth( ip, 4 ), "Area" ),
+				            GetAttr( nth( ip, 5 ), "Area" ) ) );
+
+dAdPt = nth( ip, 1 );
+n = sizeof( dAdPt );
+
+printf( "d Area / d Control points of 1st curve:\\n", nil() ):
+for ( i = 1, 1, sizeof( c1 ),
+    printf( "\\tPt(%d)x = %f  Pt(%d)y = %f\\n",
+	    list( i, nth( dAdPt, i * 2 - 1 ), i, nth( dAdPt, i * 2 ) ) ) );
+
+printf( "d Area / d Control points of 2nd curve:\\n", nil() ):
+for ( j = 1, 1, sizeof( c2 ),
+    printf( "\\tPt(%d)x = %f  Pt(%d)y = %f\\n",
+	    list( j, nth( dAdPt, ( i + j ) * 2 - 1 ),
+	          j, nth( dAdPt, ( i + j ) * 2 ) ) ) );
+
+interact( All );
+
+save( "cci4prop", All );
+
+#################################
+# Local intersections - 
+#     some dAdPt should be zero!
+#################################
+
+view_mat2 = sc( 0.25 ) * tx( -0.2 ) * ty( -0.2 );
+viewobj( view_mat2 );
+
+c1 = cbspline( 4,
+    list( ctlpt( E3, -2.921, -0.2957, 0. ),
+          ctlpt( E2, -2.4402, -1.2055 ),
+          ctlpt( E2, -1.4524, -0.6661 ),
+          ctlpt( E2, -0.991, 0.2697 ),
+          ctlpt( E2, -0.4841, 0.3282 ),
+          ctlpt( E2, 0.5361, -0.3477 ),
+          ctlpt( E2, 1.4979, -1.0105 ),
+          ctlpt( E2, 2.2127, -0.874 ),
+          ctlpt( E2, 2.5636, 0.0227 ),
+          ctlpt( E2, 1.7058, 1.199 ),
+          ctlpt( E2, 0.6661, 1.4329 ),
+          ctlpt( E2, 0.8091, 1.7383 ),
+          ctlpt( E2, 1.4784, 1.9138 ),
+          ctlpt( E2, 2.1477, 1.5824 ),
+          ctlpt( E2, 2.7651, 1.8358 ) ),
+    list( kv_open ) );
+c2 = cbspline( 4,
+    list( ctlpt( E3, 2.5882, 3.5517, 0. ),
+          ctlpt( E2, 1.069, 3.4251 ),
+          ctlpt( E2, 1.5613, 2.5108 ),
+          ctlpt( E2, 4.0088, 2.7499 ),
+          ctlpt( E2, 4.5152, 2.7077 ),
+          ctlpt( E2, 3.7697, 2.0607 ),
+          ctlpt( E2, 3.9666, 1.3996 ),
+          ctlpt( E2, 3.5587, 0.4853 ),
+          ctlpt( E2, 3.3618, -1.0057 ),
+          ctlpt( E2, 0.9284, -2.4686 ),
+          ctlpt( E2, -0.3798, -2.2154 ),
+          ctlpt( E2, -0.647, -1.5684 ),
+          ctlpt( E2, -0.0552, -1.1145 ),
+          ctlpt( E2, -0.5881, -0.7831 ),
+          ctlpt( E2, -1.4979, 0.0032 ),
+          ctlpt( E2, -2.1087, 0.0162 ),
+          ctlpt( E2, -2.8886, -0.7766 ) ),
+    list( kv_open ) );
+
+ip = CCintrProp( c1, c2, 1e-8 );
+printf( "Number of intersection loops = %d\\n", list( sizeof( ip ) - 1 ) );
+
+inter = list( nth( ip, 2 ) );
+color( inter, red );
+adwidth( inter, 3 );
+
+All = list( c1, c2, inter );
+
+printf( "Area = (%f)\\n", list( GetAttr( nth( ip, 2 ), "Area" ) ) );
+
+dAdPt = nth( ip, 1 );
+n = sizeof( dAdPt );
+
+printf( "d Area / d Control points of 1st curve:\\n", nil() ):
+for ( i = 1, 1, sizeof( c1 ),
+    printf( "\\tPt(%d)x = %f  Pt(%d)y = %f\\n",
+	    list( i, nth( dAdPt, i * 2 - 1 ), i, nth( dAdPt, i * 2 ) ) ) );
+
+printf( "d Area / d Control points of 2nd curve:\\n", nil() ):
+for ( j = 1, 1, sizeof( c2 ),
+    printf( "\\tPt(%d)x = %f  Pt(%d)y = %f\\n",
+	    list( j, nth( dAdPt, ( i + j ) * 2 - 1 ),
+	          j, nth( dAdPt, ( i + j ) * 2 ) ) ) );
+
+interact( All );
+
+save( "cci5prop", All );
+
+#################################
+
+free( i );
+free( j );
+free( n );
+free( dAdPt );
+free( c1 );
+free( c2 );
+free( ip );
+free( inter );
+free( All );
+free( view_mat2 );

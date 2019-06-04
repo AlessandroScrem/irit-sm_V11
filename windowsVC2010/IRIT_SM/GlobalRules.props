@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <IntDir32>Win32\</IntDir32>
+    <IntDir64>Win64\</IntDir64>
+    <LibDir32>..\lib\</LibDir32>
+    <LibDir64>..\lib64\</LibDir64>
+    <ExeDir32>..\ntbin\</ExeDir32>
+    <ExeDir64>..\ntbin64\</ExeDir64>
+    <IritLibs>IritExt.lib;IritGrap.lib;IritRndr.lib;IritUser.lib;IritBool.lib;IritPrsr.lib;IritMdl.lib;IritMvar.lib;IritTrim.lib;IritTriv.lib;IritTrng.lib;IritSymb.lib;IritCagd.lib;IritGeom.lib;IritMisc.lib;IritXtra.lib</IritLibs>
+    <IritLibsD>IritExtD.lib;IritGrapD.lib;IritRndrD.lib;IritUserD.lib;IritBoolD.lib;IritPrsrD.lib;IritMdlD.lib;IritMvarD.lib;IritTrimD.lib;IritTrivD.lib;IritTrngD.lib;IritSymbD.lib;IritCagdD.lib;IritGeomD.lib;IritMiscD.lib;IritXtraD.lib</IritLibsD>
+    <IritLibs64>IritExt64.lib;IritGrap64.lib;IritRndr64.lib;IritUser64.lib;IritBool64.lib;IritPrsr64.lib;IritMdl64.lib;IritMvar64.lib;IritTrim64.lib;IritTriv64.lib;IritTrng64.lib;IritSymb64.lib;IritCagd64.lib;IritGeom64.lib;IritMisc64.lib;IritXtra64.lib</IritLibs64>
+    <IritLibsD64>IritExtD64.lib;IritGrapD64.lib;IritRndrD64.lib;IritUserD64.lib;IritBoolD64.lib;IritPrsrD64.lib;IritMdlD64.lib;IritMvarD64.lib;IritTrimD64.lib;IritTrivD64.lib;IritTrngD64.lib;IritSymbD64.lib;IritCagdD64.lib;IritGeomD64.lib;IritMiscD64.lib;IritXtraD64.lib</IritLibsD64>
+    <OtherLibs>comctl32.lib;wsock32.lib;setargv.obj;ws2_32.lib;mswsock.lib;opengl32.lib;glu32.lib</OtherLibs>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <BuildMacro Include="LibDir">
+      <Value>$(LibDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="ExeDir">
+      <Value>$(ExeDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="IritLibs">
+      <Value>$(IritLibs)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="IritLibsD">
+      <Value>$(IritLibsD)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="IritLibs64">
+      <Value>$(IritLibs64)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="IritLibsD64">
+      <Value>$(IritLibsD64)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="OtherLibs">
+      <Value>$(OtherLibs)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

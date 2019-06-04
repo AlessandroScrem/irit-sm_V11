@@ -1,0 +1,127 @@
+#
+# Computes lines of fixed principle curvature over the surface.
+#
+#				Gershon Elber, October 2012
+#
+
+c = cbezier( list( ctlpt( E3, -1.0, 0.0, 0.0 ),
+	     	   ctlpt( E3,  0.0, 0.0, 1.0 ),
+	     	   ctlpt( E3,  1.0, 0.0, 0.0 ) ) );
+
+s = sFromCrvs( list( c,
+		     c * sz( -3.0 ) * tz( 2 ) * sc( 0.5 ) * ty( 0.5 ),
+		     c * sc( 0.1 ) * ty( 1 ) ),
+	       3, kv_open );
+color( s, red );
+
+# view( list( axes, s ), 1 );
+
+CLns1 = sFxCrvtrLn( s, 1, 0.001, 0.001, 1e-8, TRUE );
+color( CLns1, green );
+
+CLns2 = sFxCrvtrLn( s, 1.5, 0.001, 0.0005, 1e-8, TRUE );
+color( CLns2, blue );
+
+CLns3 = sFxCrvtrLn( s, 2, 0.001, 0.001, 1e-8, TRUE );
+color( CLns3, yellow );
+
+CLns4 = sFxCrvtrLn( s, 3, 0.001, 0.001, 1e-8, TRUE );
+color( CLns4, cyan );
+
+CLns5 = sFxCrvtrLn( s, 4, 0.001, 0.001, 1e-8, TRUE );
+color( CLns5, white );
+
+All = list( CLns1, CLns2, CLns3, CLns4, CLns5, s );
+
+interact( All );
+
+save( "sFxCLns1", All );
+
+#############################################################################
+#
+# This code is slow - can take a minute to compute one set of lines for
+# the cubics so we skip the cubic case here...
+#
+
+Comment $ # Skip the cubic cases.
+
+#############################################################################
+
+c = cbezier( list( ctlpt( E3, -1.0, 0.0, 0.0 ),
+	     	   ctlpt( E3,  0.2, 0.0, 1.0 ),
+	     	   ctlpt( E3,  0.2, 0.0, 1.0 ),
+	     	   ctlpt( E3,  1.0, 0.0, 0.0 ) ) );
+
+s = sFromCrvs( list( c,
+		     c * sz( -3.0 ) * tz( 2 ) * sc( 0.5 ) * ty( 0.5 ),
+		     c * sc( 0.1 ) * ty( 1 ),
+		     c * sc( 0.1 ) * ty( 1.3 ) ),
+	       4, kv_open );
+color( s, red );
+
+# view( list( axes, s ), 1 );
+
+CLns1 = sFxCrvtrLn( s, 0.3, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns1, green );
+
+CLns2 = sFxCrvtrLn( s, 1.0, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns2, yellow );
+
+CLns3 = sFxCrvtrLn( s, 2.0, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns3, cyan );
+
+CLns4 = sFxCrvtrLn( s, -0.3, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns4, white );
+
+CLns5 = sFxCrvtrLn( s, -1.0, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns5, blue );
+
+All = list( CLns1, CLns2, CLns3, CLns4, CLns5, s );
+
+interact( All );
+
+save( "sFxCLns2", All );
+
+#############################################################################
+
+c = pcircle( vector( 0, 0, 0 ), 0.1 );
+
+s = ruledSrf( c,
+	      c * sc( 10 ) * tz( 1 ) * tx( 0.2 ) );
+color( s, red );
+
+# view( list( axes, s ), 1 );
+
+CLns1 = sFxCrvtrLn( s, 1, 0.001, 0.001, 1e-8, TRUE );
+color( CLns1, green );
+
+CLns2 = sFxCrvtrLn( s, 1.5, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns2, blue );
+
+CLns3 = sFxCrvtrLn( s, 2, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns3, yellow );
+
+CLns4 = sFxCrvtrLn( s, 3, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns4, cyan );
+
+CLns5 = sFxCrvtrLn( s, 4, 0.0005, 0.0005, 1e-8, TRUE );
+color( CLns5, white );
+
+All = list( CLns1, CLns2, CLns3, CLns4, CLns5, s );
+
+interact( All );
+
+save( "sFxCLns3", All );
+
+#############################################################################
+
+$
+
+free( c );
+free( s );
+free( CLns1 );
+free( CLns2 );
+free( CLns3 );
+free( CLns4 );
+free( CLns5 );
+free( All );

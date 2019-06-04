@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{00101295-9882-407d-ae6b-8be8863bd532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{dcd6af87-40ce-4b5a-a784-8bb93ec25c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reseource Files">
+      <UniqueIdentifier>{d3f91e7f-ae35-4dc9-b474-c5cee656f254}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\filters\stl2irit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

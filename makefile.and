@@ -1,0 +1,60 @@
+#
+# This make file is the main make file of the IRIT solid modeller and its
+# auxilary tools, under ANDROID.
+#
+#				Gershon Elber, Nov. 1991
+#
+
+include makeflag.and
+
+#
+# All subdirectories to recurse into.
+#
+ALL_OBJS = xtra_lib misc_lib grap_lib cagd_lib symb_lib triv_lib mdl_lib \
+	trim_lib trng_lib mvar_lib user_lib prsr_lib geom_lib bool_lib \
+	rndr_lib ext_lib
+
+ALL_DIRS = xtra_lib misc_lib grap_lib cagd_lib symb_lib triv_lib mdl_lib \
+	trim_lib trng_lib mvar_lib user_lib prsr_lib geom_lib bool_lib \
+	rndr_lib ext_lib circlink
+#	irit grapdrvs aisoshad poly3d-h irender ihidden illustrt \
+#	filters test docs
+
+#
+# Uncommend the following variable to only see the actions taken.
+#
+# VIEW_ONLY = -n
+
+SHELL = /bin/sh
+
+all: 	binaries
+
+all2:
+	$(MAKE) -f makefile.and all
+	$(MAKE) CFG=Rel -f makefile.and all
+
+libirit$(IRIT_LIB_PF).$(IRIT_LIB_SFX): binaries
+	-rm misc_lib/miscatt2.o* misc_lib/miscatt3.o* geom_lib/zbuf_ogl.o*
+	$(AR) rcs libirit$(IRIT_LIB_PF).$(IRIT_LIB_SFX) *_lib/*.o$(IRIT_OBJ_PF)
+	mv libirit$(IRIT_LIB_PF).$(IRIT_LIB_SFX) lib
+
+binaries:
+	-for f in $(ALL_DIRS); do \
+		(cd $$f \
+		 && echo ----------- `pwd` ------------- \
+		 && $(MAKE) $(VIEW_ONLY) -f makefile.and install); \
+	done
+
+clean:
+	-rm -f .~* .\#*			# Emacs backup files.
+	-for f in $(ALL_DIRS); do \
+		(rm -f $$f/*.a $$f/*.o $$f/*mon.out $$f/.~* $$f/.\#* $$f/*mon.out); \
+	done
+	-rm -f poly3d-h/*.hdn
+	-rm -f irender/*.rle
+	-rm -f ihidden/*.ps
+	-rm -f irit/*.dat
+	-rm -f lib/*.a
+	-rm -f docs/irithlp docs/irithlp.o
+	-rm -f ./*/*.o
+

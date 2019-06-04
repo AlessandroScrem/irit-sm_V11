@@ -1,0 +1,177 @@
+#
+# Examples of computing and splitting curves/surfaces at poles.
+#
+#			Gershon Elber, Dec. 2012
+#
+
+Crv = cbspline( 3,
+		list( ctlpt( p3,  1,  0,  0,  1 ),
+		      ctlpt( p3,  1,  0,  0,  0 ),
+		      ctlpt( p3, -4,  0,  2,  4 ),
+		      ctlpt( p3,  2, -4,  0,  0 ),
+		      ctlpt( p3,  1,  0,  0, -1 ) ),
+		list( kv_open ) );
+
+Poles = ffSpltPoles( crv, 0.01, 1e-10, -1 );
+
+SpltPoles = ffSpltPoles( crv, 0.01, 1e-10, 0.01 );
+color( SpltPoles, yellow );
+
+interact( SpltPoles );
+
+save( "poles1", list( Poles, SpltPoles ) );
+
+free( Crv );
+free( Poles );
+free( SpltPoles );
+
+#############################################################################
+
+Cyl = Cylin( vector( 0.0, 0.0, -0.5 ), vector( 0.0, 0.0, 1.0 ), 0.2, 0 );
+Pt = point( 1, 0, 0.0 );
+Bisect = BsctCylPt( point( 0, 0, 0.5 ), vector( 0, 0, 1 ), 0.2, Pt, 1 );
+
+interact( list( axes, Cyl, Pt, Bisect ) );
+
+SpltBisect = ffSpltPoles( Bisect, 0.01, 1e-10, 0.1 );
+SpltBisect = list( nth( SpltBisect, 1 ),
+		   nth( SpltBisect, 3 ),
+		   nth( SpltBisect, 5 ) );
+
+color( SpltBisect, yellow );
+
+interact( list( axes, Cyl, Pt, SpltBisect ) );
+
+save( "poles2", list( Cyl, Pt, SpltBisect ) );
+
+free( Cyl ):
+free( Pt );
+free( Bisect );
+free( SpltBisect );
+
+#############################################################################
+
+spherePSrf = function( Radius ):s45:
+    s45 = sin( 45 * pi / 180 ):
+    return = surfPRev( cregion( pcircle( vector( 0, 0, 0 ), 1 ), 1, 3 ) * rx( 90 ) )
+		 * scale( vector( Radius, Radius, Radius ) );
+
+Srf = SpherePSrf( 0.7 ) * sx( 2 ):
+color( Srf, green );
+
+Pt = point( 1, 2, 0.2 ):
+color( Pt, cyan ):
+
+Bisect = SBisector( Srf, Pt );
+
+SpltBisect = ffSpltPoles( Bisect, 0.001, 1e-10, -0.001 ):
+
+Bndry = poly( list( vector( 0, 1, 0 ),
+		    vector( 0, 3, 0 ),
+		    vector( 4, 3, 0 ),
+		    vector( 4, 1, 0 ),
+		    vector( 0, 1, 0 ) ), false ):
+
+interact( list( SpltBisect, Bndry ) );
+
+SpltBisect = ffSpltPoles( Bisect, 0.001, 1e-10, 0.001 ):
+sizeof( SpltBisect );
+
+SpltBisect = nth( SpltBisect, 2 );
+
+interact( list( Srf, Pt, SpltBisect ) );
+
+save( "poles3", list( Srf, Pt, SpltBisect ) );
+
+free( Srf ):
+free( Pt );
+free( Bndry );
+free( Bisect );
+free( SpltBisect );
+
+#############################################################################
+#
+# Topologically challenging poles:
+#
+
+Ang1 = 45;
+Cntr1 = vector( -1, -2.2, 0 );
+Dir1 = vector( 0, 2, 0 );
+Apx1 = Cntr1 + Dir1;
+Rad1 = sqrt( Dir1 * Dir1 ) * tan( Ang1 * Pi / 180 );
+Cone1 = Cone( Cntr1, Dir1, Rad1, 0 );
+color( Cone1, yellow );
+
+Rad2 = 0.3;
+Dir2 = vector( 0, 0, 4 );
+Pos2 = point( 1, 0, -2 );
+Cyl2 = Cylin( coerce( Pos2, vector_type ), Dir2, Rad2, 0 );
+color( Cyl2, cyan );
+
+Bisect1 = BsctConCyl( coerce( Apx1, point_type ), Dir1, Ang1,
+		      Pos2, Dir2, Rad2 );
+
+interact( list( Bisect1, Cone1, Cyl2 ) );
+
+SpltBisect1 = ffSpltPoles( Bisect1, 0.01, 1e-10, -0.1 );
+
+Bndry = poly( list( vector( 0, 0, 0 ),
+		    vector( 0, 1, 0 ),
+		    vector( 1, 1, 0 ),
+		    vector( 1, 0, 0 ),
+		    vector( 0, 0, 0 ) ), false ):
+
+interact( list( SpltBisect1, Bndry ) );
+
+#################################
+
+Ang1 = 45;
+Cntr1 = vector( 1, 1, -2.2 );
+Dir1 = vector( 0, 0, 2 );
+Apx1 = Cntr1 + Dir1;
+Rad1 = sqrt( Dir1 * Dir1 ) * tan( Ang1 * Pi / 180 );
+Cone1 = Cone( Cntr1, Dir1, Rad1, 0 );
+color( Cone1, cyan );
+
+Ang2 = 45;
+Cntr2 = vector( -1, -2.2, 0 );
+Dir2 = vector( 0, 2, 0 );
+Apx2 = Cntr2 + Dir2;
+Rad2 = sqrt( Dir2 * Dir2 ) * tan( Ang2 * Pi / 180 );
+Cone2 = Cone( Cntr2, Dir2, Rad2, 0 );
+color( Cone2, yellow );
+
+Bisect2 = BsctConCn2( coerce( Apx1, point_type ), Dir1, Ang1,
+		      coerce( Apx2, point_type ), Dir2, Ang2 );
+
+interact( list( Bisect2, Cone1, Cone2 ) );
+
+SpltBisect2 = ffSpltPoles( Bisect2, 0.01, 1e-10, -0.1 );
+
+interact( list( SpltBisect2, Bndry ) );
+
+save( "poles4", list( SpltBisect1, SpltBisect2 ) );
+
+free( Bndry );
+
+free( Bisect1 );
+free( SpltBisect1 );
+
+free( Bisect2 );
+free( SpltBisect2 );
+
+free( Ang1 );
+free( Cntr1 );
+free( Dir1 );
+free( Apx1 );
+free( Rad1 );
+free( Cone1 );
+free( Ang2 );
+free( Cntr2 );
+free( Dir2 );
+free( Apx2 );
+free( Rad2 );
+free( Cone2 );
+free( Cyl2 );
+free( Pos2 );
+

@@ -1,0 +1,39 @@
+/***************************************
+ *   WebGL CSS skeleton for irit2wgl   *
+ *   Author: Avi Kaplan.               *
+ ***************************************/
+
+#main {
+	border: none;
+}
+
+#control {
+	border: 5px outset;
+	background-color: lightgrey;
+	text-align: center;
+	font-family: "Times New Roman";
+	font-size: 20px;
+}
+
+#canvas {
+	border: none;
+}
+
+.menu-entry {
+	border: 5px outset;
+	background-color: aqua;
+	text-align: center;
+	font-family: "Times New Roman";
+	font-size: 16px;
+}
+
+.menu-entry-h {
+	color: darkred;
+	font-family: "Times New Roman";
+	font-size: 20px;
+}
+
+#status-data {
+	border: 5px outset;
+	background-color: yellow;
+}

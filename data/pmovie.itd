@@ -1,0 +1,21 @@
+[OBJECT [rgb "255,255,255"] 
+    [animation
+	[OBJECT NONE
+	    [OBJECT ROT_X
+		[CURVE BSPLINE 2 2 E1
+		    [KV 9 9 11 11]
+		    [0]
+		    [720]
+		]
+	    ]
+	]
+    ]
+    [pmovie "TeapotTechnionSml.gif, S 1 1, R, T=10,11"]
+    [ExecAnimParams "7, 14, 0.001, 0, 1, 0, 0, 0, 0, 1"] MOVIE_TEST
+    [POLYGON [PLANE 0 0 1 0] 	4
+	[[uvvals "0 0"] 1 -1 0]
+	[[uvvals "0 1"] 1 1 0]
+	[[uvvals "1 1"] -1 1 0]
+	[[uvvals "1 0"] -1 -1 0]
+    ]
+]

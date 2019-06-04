@@ -1,0 +1,301 @@
+#
+# Examples of 2 planar curve 2-contact motion analysis
+#
+#				Gershon Elber amd Yong Joon Kim, Aug 2014
+#
+
+Eval2CntctCSpaceOneCrv = function( OneMotionPath, c1, c2 ): 
+    i: Pt: PtList: Theta: LastTheta: Txy: c1r:
+    return = nil():
+    PtList = nil():
+    LastTheta = -1000:
+    for ( i = 1, 1, sizeof( OneMotionPath ),
+        Pt = nth( OneMotionPath, i ):
+	Theta = coord( Pt, 5 ):
+        c1r = c1 * rz( Theta * 180 / Pi ):
+        Txy = coerce( ceval( c2, coord( Pt, 2 ) ), point_type ) -
+	      coerce( ceval( c1r, coord( Pt, 1 ) ), point_type ):
+	if ( LastTheta != -1000,
+	    if ( abs( LastTheta - Theta ) > Pi, # Crossing 2Pi - break crv.
+		if ( sizeof( PtList ) > 1,
+		    snoc( cbspline( 2, PtList, list( kv_open ) ), return ) ):
+		PtList = nil() ) ):
+	LastTheta = Theta:
+	snoc( ctlpt( E3, coord( Txy, 0 ), coord( Txy, 1 ), Theta ),
+	      PtList ) ):
+    if ( sizeof( PtList ) > 1,
+         snoc( cbspline( 2, PtList, list( kv_open ) ), return ) );
+
+Eval2CntctCSpace = function( MotionPath, c1, c2 ): i:
+    return = nil():
+    for ( i = 1, 1, sizeof( MotionPath ),
+	snoc( Eval2CntctCSpaceOneCrv( nth( MotionPath, i ), c1, c2 ),
+	      return ) );
+
+Eval2CntctCAnimOneCrv = procedure( OneMotionPath, c1, c2, Step ): 
+    i: c1r: Pt: Theta: Txy: Anm:
+    for ( i = 1, Step, sizeof( OneMotionPath ),
+        Pt = nth( OneMotionPath, i ):
+	Theta = coord( Pt, 5 ):
+	c1r = c1 * rz( Theta * 180 / Pi ):
+        Txy = coerce( ceval( c2, coord( Pt, 2 ) ), point_type ) -
+	      coerce( ceval( c1r, coord( Pt, 1 ) ), point_type ):
+	Anm = list( point( coord( Txy, 0 ) - 6, coord( Txy, 1 ), Theta ),
+		    c1r * trans( Txy ) ):
+	color( nref( Anm, 1 ), red ):
+        viewobj( Anm ) );
+
+Eval2CntctAnim = procedure( MotionPath, c1, c2, CSpace, Step ): i:
+    view( list( axes, CSpace, c2 * tx( 6 ) ), 1 ):
+    for ( i = 1, 1, sizeof( MotionPath ),
+	Eval2CntctCAnimOneCrv( nth( MotionPath, i ), c1, c2 * tx( 6 ),
+			       Step ) );
+
+#############################################################################
+# Note we execute only the 1st example - take long time (over a minute each)
+#############################################################################
+
+c1 = cbspline( 4,
+    list( ctlpt( E2, -0.25, 0.17),
+	ctlpt( E2, -0.35, 0),
+	ctlpt( E2, -0.25, -0.17),
+	ctlpt( E2, 0, -0.25),
+	ctlpt( E2, 0.25, -0.17),
+	ctlpt( E2, 0.35, 0),
+	ctlpt( E2, 0.25, 0.17),
+	ctlpt( E2, 0, 0.25)),
+    list( kv_periodic ) );
+attrib( c1, "color", green );
+
+c2 = cbspline( 4,
+    list( ctlpt( E2, 0.325, 0.031),
+	ctlpt( E2, 0.459, 0.088),
+	ctlpt( E2, 0.716, 0.419),
+	ctlpt( E2, 0.1, 0.889),
+	ctlpt( E2, -0.531, 0.705 ),
+	ctlpt( E2, -0.924, 0.307 ),
+	ctlpt( E2, -1.172, -0.508 ),
+	ctlpt( E2, -0.62, -0.924),
+	ctlpt( E2, 0.151, -1.1 ),
+	ctlpt( E2, 0.569, -0.959 ),
+	ctlpt( E2, 0.544, -0.511 ),
+	ctlpt( E2, 0.075, -0.414 ),
+	ctlpt( E2, -0.964, -0.704 ),
+	ctlpt( E2, -0.465, -0.239),
+	ctlpt( E2, -0.911, 0.192 ),
+	ctlpt( E2, -0.087, 0.073),
+	ctlpt( E2, 0.192, -0.026 ),
+	ctlpt( E2, 0.325, 0.031)),
+    list( kv_open));
+attrib( c2, "color", yellow );
+
+MotionPath = c2contact( c1, c2, 1e-3, 1e-3, 1e-8 );
+sizeof( MotionPath );
+
+CSpace = Eval2CntctCSpace( MotionPath, c1, c2 );
+
+interact( list( axes, CSpace ) );
+save( "2cntct1", CSpace );
+
+Eval2CntctAnim( MotionPath, c1, c2, CSpace, 5 );
+
+pause();
+
+#################################
+comment $
+#################################
+
+c1 = cbspline( 4,
+    list( ctlpt( E3, 0.1, 0.2, 0. ),
+          ctlpt( E2, 0.8, 1.2 ),
+          ctlpt( E2, 0., 1.8 ),
+          ctlpt( E2, -0.8, 1.2 ),
+          ctlpt( E2, -0.1, 0.2 ),
+          ctlpt( E2, -0.2, 0.1 ),
+          ctlpt( E2, -1.2, 0.8 ),
+          ctlpt( E1, -1.8 ),
+          ctlpt( E2, -1.2, -0.8 ),
+          ctlpt( E2, -0.2, -0.1 ),
+          ctlpt( E2, -0.1, -0.2 ),
+          ctlpt( E2, -0.8, -1.2 ),
+          ctlpt( E2, 0., -1.8 ),
+          ctlpt( E2, 0.8, -1.2 ),
+          ctlpt( E2, 0.1, -0.2 ),
+          ctlpt( E2, 0.2, -0.1 ),
+          ctlpt( E2, 1.2, -0.8 ),
+          ctlpt( E1, 1.8 ),
+          ctlpt( E2, 1.2, 0.8 ),
+          ctlpt( E2, 0.2, 0.1 ) ),
+    list( kv_periodic ) );
+attrib( c1, "color", green );
+
+c2 = cbspline( 4,
+    list( ctlpt( E3, 0.1, 0.2, 0. ),
+          ctlpt( E2, 0.8, 1.2 ),
+          ctlpt( E2, 0., 1.8 ),
+          ctlpt( E2, -0.8, 1.2 ),
+          ctlpt( E2, -0.1, 0.2 ),
+          ctlpt( E2, -0.223, -0.013 ),
+          ctlpt( E2, -1.439, 0.093 ),
+          ctlpt( E2, -1.559, -0.9 ),
+          ctlpt( E2, -0.639, -1.293 ),
+          ctlpt( E2, -0.123, -0.187 ),
+          ctlpt( E2, 0.123, -0.187 ),
+          ctlpt( E2, 0.639, -1.293 ),
+          ctlpt( E2, 1.559, -0.9 ),
+          ctlpt( E2, 1.439, 0.093 ),
+          ctlpt( E2, 0.223, -0.013 ) ),
+    list( kv_periodic ) );
+attrib( c2, "color", yellow );
+
+MotionPath = c2contact( c1, c2, 1e-3, 1e-3, 1e-8 );
+sizeof( MotionPath );
+
+CSpace = Eval2CntctCSpace( MotionPath, c1, c2 );
+
+interact( list( axes, CSpace ) );
+
+save( "2cntct2", CSpace );
+
+Eval2CntctAnim( MotionPath, c1, c2, CSpace, 5 );
+
+pause();
+
+#################################
+
+c1 = cbspline( 4,
+    list( ctlpt( E2, -0.33, 0.349 ),
+          ctlpt( E2, -0.447, 0.443 ),
+          ctlpt( E2, -0.707, 0.561 ),
+          ctlpt( E2, -0.53, 0.172 ),
+          ctlpt( E2, -0.114, -0.146 ),
+          ctlpt( E2, 0.025, -0.196 ),
+          ctlpt( E2, -0.15, -0.746 ),
+          ctlpt( E2, 0, -1.146 ),
+          ctlpt( E2, 0.15, -0.746 ),
+          ctlpt( E2, -0.025, -0.196 ),
+          ctlpt( E2, 0.141, -0.146 ),
+          ctlpt( E2, 0.53, 0.171 ),
+          ctlpt( E2, 0.707, 0.561 ),
+          ctlpt( E2, 0.318, 0.383 ),
+          ctlpt( E2, 0, -0.005 ),
+          ctlpt( E2, 0, -0.005 ),
+          ctlpt( E2, -0.212, 0.254 ),
+          ctlpt( E2, -0.33, 0.348 )),
+    list( kv_open ) );
+attrib( c1, "color", green );
+
+c2 = cbspline( 4,
+    list( ctlpt( E2, 0.549, 0.992 ),
+          ctlpt( E2, 0.692, 0.983),
+          ctlpt( E2, 1.003, 1.032 ),
+          ctlpt( E2, 1.135, 1.073 ),
+          ctlpt( E2, 1.426, 1.156 ),
+          ctlpt( E2, 2.218, 1.429 ),
+          ctlpt( E2, 2.920, 1.407),
+          ctlpt( E2, 3.210, 0.3965),
+	ctlpt( E2, 2.92, -0.311),
+	ctlpt( E2, 2.417, -0.501),
+	ctlpt( E2, 1.822, -0.124),
+	ctlpt( E2, 1.511, 0.052),
+	ctlpt( E2, 1.313, 0.151),
+	ctlpt( E2, 0.920, 0.391),
+	ctlpt( E2, 0.727, 0.406),
+	ctlpt( E2, 0.502, 0.239),
+	ctlpt( E2, 0.529, -0.308),
+	ctlpt( E2, 0.183, -0.786),
+	ctlpt( E2, -0.344, -0.845),
+	ctlpt( E2, -1.091, -0.766),
+	ctlpt( E2, -1.48, 0.019),
+	ctlpt( E2, -1.527, 0.931),
+	ctlpt( E2, -1.217, 1.78),
+	ctlpt( E2, -0.503, 1.863),
+	ctlpt( E2, 0.011, 1.645),
+	ctlpt( E2, 0.315, 1.222) ),
+    list( kv_periodic ) );
+attrib( c2, "color", yellow );
+
+MotionPath = c2contact( c1, c2, 1e-3, 1e-3, 1e-8 );
+sizeof( MotionPath );
+
+CSpace = Eval2CntctCSpace( MotionPath, c1, c2 );
+
+interact( list( axes, CSpace ) );
+save( "2cntct3", CSpace );
+
+Eval2CntctAnim( MotionPath, c1, c2, CSpace, 5 );
+
+pause();
+
+#################################
+
+c1 = cbspline( 4,
+    list( ctlpt( E2, 0.194, -0.245),
+	ctlpt( E2, 0.431, -0.353),
+	ctlpt( E2, 0.323, -0.116),
+	ctlpt( E2, -0.015, 0.108),
+	ctlpt( E2, -0.323, -0.116),
+	ctlpt( E2, -0.431, -0.353),
+	ctlpt( E2, -0.194, -0.245),
+	ctlpt( E2, 0, -0.008),
+	ctlpt( E2, 0, -0.008)),
+    list( kv_periodic ) );
+attrib( c1, "color", green );
+
+c2 = cbspline( 4,
+    list( ctlpt( E2, 0.513, 1.008),
+	ctlpt( E2, 0.424, 0.981),
+	ctlpt( E2, 0.425, 0.88),
+	ctlpt( E2, 0.506, 0.809),
+	ctlpt( E2, 0.492, 0.77 ),
+	ctlpt( E2, 0.41, 0.808),
+	ctlpt( E2, 0.305, 0.924),
+	ctlpt( E2, 0.119, 0.749),
+	ctlpt( E2, 0.155, 0.574),
+	ctlpt( E2, -0.067, 0.039),
+	ctlpt( E2, 0.212, 0.395),
+	ctlpt( E2, 0.318, 0.559),
+	ctlpt( E2, 0.36, 0.633),
+	ctlpt( E2, 0.335, 0.493),
+	ctlpt( E2, 0.27, 0.277),
+	ctlpt( E2, 0.189, 0.111),
+	ctlpt( E2, 0.144, -0.001),
+	ctlpt( E2, 0.513, -0.002),
+	ctlpt( E2, 0.858, 0.003),
+	ctlpt( E2, 0.823, 0.112),
+	ctlpt( E2, 0.736, 0.309),
+	ctlpt( E2, 0.687, 0.507),
+	ctlpt( E2, 0.645, 0.682),
+	ctlpt( E2, 0.715, 0.534),
+	ctlpt( E2, 0.801, 0.382),
+	ctlpt( E2, 1.058, 0.042),
+	ctlpt( E2, 0.884, 0.557),
+	ctlpt( E2, 0.899, 0.805),
+	ctlpt( E2, 0.731, 0.891),
+	ctlpt( E2, 0.647, 0.839),
+	ctlpt( E2, 0.544, 0.77),
+	ctlpt( E2, 0.536, 0.807),
+	ctlpt( E2, 0.61, 0.867),
+	ctlpt( E2, 0.62, 0.987)),
+    list( kv_periodic ) );
+attrib( c2, "color", yellow );
+
+MotionPath = c2contact( c1, c2, 3e-3, 3e-3, 1e-8 );
+sizeof( MotionPath );
+
+CSpace = Eval2CntctCSpace( MotionPath, c1, c2 );
+
+interact( list( axes, CSpace ) );
+save( "2cntct4", CSpace );
+
+Eval2CntctAnim( MotionPath, c1, c2, CSpace, 5 );
+
+#################################
+$
+#################################
+
+free( c1 );
+free( c2 );
+free( MotionPath );
+free( CSpace );
+

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\bool_lib\adjacncy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bool_lib\bool-2d.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bool_lib\bool-hi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bool_lib\bool1low.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bool_lib\bool2low.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\bool_lib\bool_err.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\bool_lib\bool_loc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\bool_lib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bool_lib\makefile.ami" />
+    <None Include="..\..\bool_lib\makefile.os2" />
+    <None Include="..\..\bool_lib\makefile.sas" />
+    <None Include="..\..\bool_lib\makefile.unx" />
+    <None Include="..\..\bool_lib\makefile.wce" />
+    <None Include="..\..\bool_lib\makefile.wnt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Reseource Files">
+      <UniqueIdentifier>{76825d33-faee-4515-b982-f5ae1320f653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{7362a7fd-548b-4147-aadd-282b026b8035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{b65740c1-b42c-4aad-a35b-1ea8ef92906a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

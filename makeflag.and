@@ -1,0 +1,107 @@
+#
+# This makeflag is the main makefile setup of the IRIT solid modeller and its
+# auxilary tools, under ANDROID and GNU MAKE.
+#
+#				Heinrich Koutcherouk, Jul. 2012
+#
+# The IRIT_SRC_DIR variables below MUST have ABSOLUTE path. Since this file
+# is sourced from several directories relative path specification will
+# be simple wrong.
+#
+
+AND_TOOLCHAIN = /nx4-labs/cggc/gershon/Android/AndroidArmToolchain
+CC = $(AND_TOOLCHAIN)/bin/arm-linux-androideabi-gcc
+#LD = $(AND_TOOLCHAIN)/bin/arm-linux-androideabi-ld
+AR = $(AND_TOOLCHAIN)/bin/arm-linux-androideabi-ar
+
+IRIT_SRC_DIR = /home/gershon/l/irit/Android/
+
+#
+# All libraries created will be installed into the IRIT_LIB_DIR directory.
+#
+IRIT_LIB_DIR = ../lib
+
+#
+# All includes files associated with the installed libraries will be
+# installed into the IRIT_INC_DIR directory.
+#
+IRIT_INC_DIR = .
+
+#
+# All binaries created will be installed into the IRIT_BIN_DIR directory.
+#
+IRIT_BIN_DIR = ../bin
+
+#
+# Invoke this make file as 'make CFG=Rel makefile.unx' for release mode:
+#
+ifeq ($(CFG), Rel)
+	IRIT_OBJ_PF =
+	IRIT_LIB_PF =
+	IRIT_EXE_PF = 
+	IRIT_STRIP_EXE = strip
+else
+	IRIT_OBJ_PF = D
+	IRIT_LIB_PF = D
+	IRIT_EXE_PF = D
+	IRIT_STRIP_EXE = ls
+endif
+
+#
+# Location of object file to resolve circularities in libraries.
+#
+IRIT_CIRCLINK = $(IRIT_SRC_DIR)/circlink/circlink.o$(IRIT_OBJ_PF)
+
+# Static linking of libraries...
+
+IRIT_LIB_SFX = a
+IRIT_LIB_MAKE = $(AR) rcs
+# IRIT_LIB_RAN = ranlib
+
+#
+# Flags for Android
+#
+DFLAGS = -D__DANDROID__
+ifeq ($(CFG), Rel)
+    CFLAGS = -O2 -DNDEBUG $(DFLAGS)
+else
+    CFLAGS = -g -DDEBUG $(DFLAGS)
+endif
+IRIT_MORE_LIBS =
+GRAPX11LIBS =
+GRAPOGLLIBS =
+GRAPDRVS =
+
+#
+# Default rule for compilation.
+#
+
+%.o$(IRIT_OBJ_PF): %.c
+	$(CC) $(CFLAGS) $(IRIT_URT_FLAGS) $(IRIT_GIF_FLAGS) $(IRIT_MORE_FLAGS) -I. -I$(IRIT_INC_DIR) $(IRIT_URT_INC) $(IRIT_GIF_INC) $(IRIT_MORE_INC) -o $@ -c $<
+
+%.o$(IRIT_OBJ_PF): %.cpp
+	$(CC) $(CFLAGS) $(IRIT_URT_FLAGS) $(IRIT_GIF_FLAGS) $(IRIT_MORE_FLAGS) -I. -I$(IRIT_INC_DIR) $(IRIT_URT_INC) $(IRIT_GIF_INC) $(IRIT_MORE_INC) -o $@ -c $<
+
+
+#
+# All libraries.
+#
+IRIT_LIBS = $(IRIT_CIRCLINK) -L$(IRIT_LIB_DIR) $(IRIT_MORE_LIBS) \
+	-lIritExt$(IRIT_LIB_PF) \
+	-lIritGrap$(IRIT_LIB_PF) \
+	-lIritUser$(IRIT_LIB_PF) \
+	-lIritRndr$(IRIT_LIB_PF) \
+	-lIritBool$(IRIT_LIB_PF) \
+	-lIritPrsr$(IRIT_LIB_PF) \
+	-lIritMdl$(IRIT_LIB_PF) \
+	-lIritMvar$(IRIT_LIB_PF) \
+	-lIritTrim$(IRIT_LIB_PF) \
+	-lIritTriv$(IRIT_LIB_PF) \
+	-lIritTrng$(IRIT_LIB_PF) \
+	-lIritSymb$(IRIT_LIB_PF) \
+	-lIritCagd$(IRIT_LIB_PF) \
+	-lIritGeom$(IRIT_LIB_PF) \
+	-lIritMisc$(IRIT_LIB_PF) \
+	-lIritXtra$(IRIT_LIB_PF) \
+	$(IRIT_URT_LIB) $(IRIT_GIF_LIB) $(IRIT_PNG_LIB) $(IRIT_GZIP_LIB) # -l gif
+

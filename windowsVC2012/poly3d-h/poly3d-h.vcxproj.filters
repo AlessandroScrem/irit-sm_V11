@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\poly3d-h\out-edge.c" />
+    <ClCompile Include="..\..\poly3d-h\poly3d-h.c" />
+    <ClCompile Include="..\..\poly3d-h\prepdata.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\poly3d-h\program.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\poly3d-h\makefile.ami" />
+    <None Include="..\..\poly3d-h\makefile.os2" />
+    <None Include="..\..\poly3d-h\makefile.sas" />
+    <None Include="..\..\poly3d-h\makefile.unx" />
+    <None Include="..\..\poly3d-h\makefile.wnt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{24171fc7-81d7-48be-97dc-aecd7bbab601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{1df451e1-5f4d-4c8f-823f-f3c82cfffbd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{586b50cd-3aee-4dec-8fa0-1b740039cbfc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

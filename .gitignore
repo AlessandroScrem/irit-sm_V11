@@ -1,0 +1,23 @@
+# Visual Studio files
+
+*.ipch
+*.sdf
+*.opensdf
+*.lastbuildstate
+*.log
+*.tlog
+*.idb
+*.pdb
+*.suo
+
+# Binaries
+
+*.o
+*.a
+
+# Directories
+
+lib/
+bin/
+Debug/
+Release/

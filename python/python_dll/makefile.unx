@@ -1,0 +1,89 @@
+
+#
+# Makefile for the IRIT solid modeler.
+#
+#
+# This makefile is for Unix.
+#
+
+# Set this variable to the root of the python installation:
+PYTHON_INC = /usr/include/python2.6
+PYTHON_LIB = /usr/lib64/python2.6
+
+# Set these variables to the root of the IRIT installation:
+include ../../makeflag.unx
+IRIT_DIR = ../..
+
+#
+# Uncomment to compile with the irit{D}.so single united library.
+#
+
+IRIT_MORE_FLAGS = -I$(IRIT_DIR)/irit -I$(PYTHON_INC)
+
+IRIT_OBJS = \
+  	$(IRIT_DIR)/irit/bsc_geom.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/dosintr.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm1.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm2.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm3.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm4.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm5.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm6.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm7.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/freefrm8.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptevl0.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptevl1.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptevl2.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptevl3.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptevl4.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptgetc.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/inptprsr.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/irit1db.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/irit2db.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/irit_io.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/objects1.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/objects2.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/overload.o$(IRIT_OBJ_PF) \
+	$(IRIT_DIR)/irit/support.o$(IRIT_OBJ_PF)
+
+#############################################################################
+# Swig activation:
+#############################################################################
+
+iritpy_interface.c:	irit_wrap.c
+
+irit_wrap.c:	irit.i
+	swig -python irit.i
+
+irit.i:	irit_to_swig1.in irit_to_swig2.in $(IRIT_OBJS) iritswig$(IRIT_EXE_PF)
+	iritswig$(IRIT_EXE_PF)
+
+iritswig$(IRIT_EXE_PF): $(IRIT_OBJS) iritswig.o$(IRIT_OBJ_PF)
+	$(CC) -o iritswig$(IRIT_EXE_PF) iritswig.o$(IRIT_OBJ_PF) $(IRIT_OBJS) $(IRIT_LIBS) $(W32CONMTLIBS) -lm
+
+#############################################################################
+# Python so making:
+#############################################################################
+
+LCL_OBJS = \
+	python_link.o$(IRIT_OBJ_PF) \
+	iritpy_interface.o$(IRIT_OBJ_PF) \
+	irit_wrap.o$(IRIT_OBJ_PF)
+
+_irit$(IRIT_EXE_PF).so: $(LCL_OBJS) $(IRIT_OBJS)
+	$(CC) -shared -o _irit$(IRIT_EXE_PF).so \
+		-L $(IRIT_DIR)/lib -L $(PYTHON_LIB) -lpython2.6 \
+		$(IRIT_OBJS) $(LCL_OBJS) $(IRIT_LIBS) $(W32CONMTLIBS) -lm
+
+install:	_irit$(IRIT_EXE_PF).so
+	cp _irit$(IRIT_EXE_PF).so ../scripts
+	cp irit.py ../scripts
+
+#############################################################################
+
+clean:
+	-rm *.o *.oD *.lib \
+	iritpy_interface.* irit_wrap.c irit.i irit.py *.so irit_wrap.c
+
+# Dependencies starts here - do not touch, generated automatically.
+

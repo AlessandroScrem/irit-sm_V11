@@ -1,0 +1,243 @@
+
+#
+# Testing script for the multivariate solver with 2 DOF. 
+#
+#############################################################################
+
+MVpllns = iritstate("MVBivarOutPllns", 0 );
+
+#############################################################################
+# 1. Two components, a quarter of a sphere and a plane:
+#    (x^2 + y^2 + z^2 - 1/4) * (z - 3/4).
+
+SubdivTol = 0.01;
+M = coerce( mvexplicit( 3, "A^2 * C - 0.75 * A^2 + B^2 * C - 0.75 * B^2 + C^3 - 0.75 * C^2 - 0.25 * C + 3 / 16" ), bspline_type );
+z = mzero( list( M ), SubdivTol, 1e-12 );
+save( "MVBivar1", z );
+
+interact( z );
+
+#############################################################################
+# 2. An impicit surface with self tangency, example taken 
+#    from http://www-sop.inria.fr/galaad/surface/ 
+
+SubdivTol = 0.008;
+M = coerce( mvexplicit( 3, "16*A^4 - 32*A^3 + 32*A^2*C^2 - 32*A^2*C + (764*A^2)/25 - 32*A*C^2 + 32*A*C - (364*A)/25 - 16*B^4 + 32*B^3 - 23*B^2 + 7*B + 16*C^4 - 32*C^3 + 32*C^2 - 16*C + 289/100" ), bspline_type );
+z = mzero( list( M ), SubdivTol, 1e-12 );
+save( "MVBivar2", z );
+
+interact( z );
+
+#############################################################################
+# 3. The product of two tori, chosen such that they are linked.
+
+SubdivTol = 0.005;
+M = coerce( mvexplicit( 3, "A^8 - (99*A^7)/25 + 4*A^6*B^2 - 4*A^6*B + 4*A^6*C^2 - 4*A^6*C + (43033*A^6)/5000 - (297*A^5*B^2)/25 + (297*A^5*B)/25 - (297*A^5*C^2)/25 + (297*A^5*C)/25 - (1497177*A^5)/125000 + 6*A^4*B^4 - 12*A^4*B^3 + 12*A^4*B^2*C^2 - 12*A^4*B^2*C + (32787*A^4*B^2)/1250 - 12*A^4*B*C^2 + 12*A^4*B*C - (25287*A^4*B)/1250 + 6*A^4*C^4 - 12*A^4*C^3 + (32787*A^4*C^2)/1250 - (25287*A^4*C)/1250 + (1190155809*A^4)/100000000 - (297*A^3*B^4)/25 + (594*A^3*B^3)/25 - (594*A^3*B^2*C^2)/25 + (594*A^3*B^2*C)/25 - (8110861*A^3*B^2)/250000 + (594*A^3*B*C^2)/25 - (594*A^3*B*C)/25 + (5140861*A^3*B)/250000 - (297*A^3*C^4)/25 + (594*A^3*C^3)/25 - (8153453*A^3*C^2)/250000 + (5183453*A^3*C)/250000 - (21094823871*A^3)/2500000000 + 4*A^2*B^6 - 12*A^2*B^5 + 12*A^2*B^4*C^2 - 12*A^2*B^4*C + (133197*A^2*B^4)/5000 - 24*A^2*B^3*C^2 + 24*A^2*B^3*C - (83197*A^2*B^3)/2500 + 12*A^2*B^2*C^4 - 24*A^2*B^2*C^3 + (133197*A^2*B^2*C^2)/2500 - (103197*A^2*B^2*C)/2500 + (726968621*A^2*B^2)/25000000 - 12*A^2*B*C^4 + 24*A^2*B*C^3 - (103197*A^2*B*C^2)/2500 + (73197*A^2*B*C)/2500 - (360983621*A^2*B)/25000000 + 4*A^2*C^6 - 12*A^2*C^5 + (133197*A^2*C^4)/5000 - (83197*A^2*C^3)/2500 + (733293533*A^2*C^2)/25000000 - (367308533*A^2*C)/25000000 + (1083083852891*A^2)/250000000000 - (99*A*B^6)/25 + (297*A*B^5)/25 - (297*A*B^4*C^2)/25 + (297*A*B^4*C)/25 - (5116507*A*B^4)/250000 + (594*A*B^3*C^2)/25 - (594*A*B^3*C)/25 + (2641507*A*B^3)/125000 - (297*A*B^2*C^4)/25 + (594*A*B^2*C^3)/25 - (5137803*A*B^2*C^2)/125000 + (3652803*A*B^2*C)/125000 - (18359342287*A*B^2)/1250000000 + (297*A*B*C^4)/25 - (594*A*B*C^3)/25 + (3652803*A*B*C^2)/125000 - (2167803*A*B*C)/125000 + (7626807287*A*B)/1250000000 - (99*A*C^6)/25 + (297*A*C^5)/25 - (5159099*A*C^4)/250000 + (2684099*A*C^3)/125000 - (18826949207*A*C^2)/1250000000 + (7881454207*A*C)/1250000000 - (9063775751679*A)/6250000000000 + B^8 - 4*B^7 + 4*B^6*C^2 - 4*B^6*C + (22541*B^6)/2500 - 12*B^5*C^2 + 12*B^5*C - (32623*B^5)/2500 + 6*B^4*C^4 - 12*B^4*C^3 + (67623*B^4*C^2)/2500 - (52623*B^4*C)/2500 + (66701331*B^4)/5000000 - 12*B^3*C^4 + 24*B^3*C^3 - (42623*B^3*C^2)/1250 + (27623*B^3*C)/1250 - (23996331*B^3)/2500000 + 4*B^2*C^6 - 12*B^2*C^5 + (67623*B^2*C^4)/2500 - (42623*B^2*C^3)/1250 + (385029319*B^2*C^2)/12500000 - (196914319*B^2*C)/12500000 + (304785092047*B^2)/62500000000 - 4*B*C^6 + 12*B*C^5 - (52623*B*C^4)/2500 + (27623*B*C^3)/1250 - (196914319*B*C^2)/12500000 + (83799319*B*C)/12500000 - (99093454547*B)/62500000000 + C^8 - 4*C^7 + (22541*C^6)/2500 - (32623*C^5)/2500 + (335614959*C^4)/25000000 - (122089959*C^3)/12500000 + (313775427379*C^2)/62500000000 - (102813029879*C)/62500000000 + 2245231271189/7812500000000" ), bspline_type );
+
+z = mzero( list( M ), SubdivTol, 1e-10 );
+save( "MVBivar3", z );
+
+interact( z );
+
+#############################################################################
+# 4. Four concentric spheres, radius from 0.8 and factor by 0.5 (degree 8
+#    equation!): the equation was used by expanding the following commands 
+#    in Matlab (symbolic toolbox required):
+#    >> syms A B C;
+#    >> expand((A^2 + B^2 + C^2 - 0.8^2) * (A^2 + B^2 + C^2 - 0.4^2) * (A^2 + B^2 + C^2 - 0.2^2) * (A^2 + B^2 + C^2 - 0.1^2)) 
+# the expanded equation that was returned, is used here. 
+
+SubdivTol = 0.01;
+M = coerce( mvexplicit( 3, "A^8 + 4*A^6*B^2 + 4*A^6*C^2 - (17*A^6)/20 + 6*A^4*B^4 + 12*A^4*B^2*C^2 - (51*A^4*B^2)/20 + 6*A^4*C^4 - (51*A^4*C^2)/20 + (357*A^4)/2500 + 4*A^2*B^6 + 12*A^2*B^4*C^2 - (51*A^2*B^4)/20 + 12*A^2*B^2*C^4 - (51*A^2*B^2*C^2)/10 + (357*A^2*B^2)/1250 + 4*A^2*C^6 - (51*A^2*C^4)/20 + (357*A^2*C^2)/1250 - (17*A^2)/3125 + B^8 + 4*B^6*C^2 - (17*B^6)/20 + 6*B^4*C^4 - (51*B^4*C^2)/20 + (357*B^4)/2500 + 4*B^2*C^6 - (51*B^2*C^4)/20 + (357*B^2*C^2)/1250 - (17*B^2)/3125 + C^8 - (17*C^6)/20 + (357*C^4)/2500 - (17*C^2)/3125 + 16/390625" ), bspline_type );
+
+z = mzero( list( M ), SubdivTol, 1e-12);
+save( "MVBivar4", z );
+
+interact( z );
+
+#############################################################################
+# 5 - 6 are highly singular, surfaces with self intersection curves,
+#    non-isolated singularities, around which subdivision tolerance is reached.
+
+# 5. A Steiner surface.  The equation was used by expanding the following
+#    commands in Matlab (symbolic toolbox required):
+#    >> syms A B C;
+#    >> expand((A-0.5)^2 * (B-0.5)^2 + (B-0.5)^2 * (C-0.5)^2 + (C-0.5)^2 * (A-0.5)^2 - (A-0.5) * (B-0.5) * (C-0.5))
+#    the expanded equation that was returned, is used here. 
+
+SubdivTol = 0.01;
+M = coerce( mvexplicit( 3, "A^2*B^2 - A^2*B + A^2*C^2 - A^2*C + A^2/2 - A*B^2 - A*B*C + (3*A*B)/2 - A*C^2 + (3*A*C)/2 - (3*A)/4 + B^2*C^2 - B^2*C + B^2/2 - B*C^2 + (3*B*C)/2 - (3*B)/4 + C^2/2 - (3*C)/4 + 5/16" ), bspline_type ); 
+
+z = mzero( list( M ), SubdivTol, 1e-12 );
+
+save( "MVBivar5", z );
+
+interact( z );
+
+#  6. A Klein bottle. The implicit equation was taken from
+#        http://www-sop.inria.fr/galaad/surface
+#     (with some scaling and translation).
+
+SubdivTol = 0.005;
+M = coerce( mvexplicit( 3, "1000000*A^6 - 3000000*A^5 + 3000000*A^4*B^2 - 3200000*A^4*B + 3000000*A^4*C^2 - 3000000*A^4*C + 5320000*A^4 - 6000000*A^3*B^2 + 6400000*A^3*B - 6000000*A^3*C^2 + 6160000*A^3*C - 5720000*A^3 + 3000000*A^2*B^4 - 6400000*A^2*B^3 + 6000000*A^2*B^2*C^2 - 6000000*A^2*B^2*C + 11000000*A^2*B^2 - 6400000*A^2*B*C^2 + 6400000*A^2*B*C - 8096000*A^2*B + 3000000*A^2*C^4 - 6000000*A^2*C^3 + 10560000*A^2*C^2 - 7800000*A^2*C + 4200800*A^2 - 3000000*A*B^4 + 6400000*A*B^3 - 6000000*A*B^2*C^2 + 6160000*A*B^2*C - 8080000*A*B^2 + 6400000*A*B*C^2 - 6592000*A*B*C + 4992000*A*B - 3000000*A*C^4 + 6160000*A*C^3 - 7800000*A*C^2 + 4854400*A*C - 1868000*A + 1000000*B^6 - 3200000*B^5 + 3000000*B^4*C^2 - 3000000*B^4*C + 5680000*B^4 - 6400000*B^3*C^2 + 6400000*B^3*C - 6048000*B^3 + 3000000*B^2*C^4 - 6000000*B^2*C^3 + 10920000*B^2*C^2 - 8000000*B^2*C + 4335200*B^2 - 3200000*B*C^4 + 6400000*B*C^3 - 8032000*B*C^2 + 4928000*B*C - 1886720*B + 1000000*C^6 - 3000000*C^5 + 5240000*C^4 - 5560000*C^3 + 4069600*C^2 - 1816800*C + 472384" ), bspline_type );
+
+z = mzero( list( M ), SubdivTol, 1e-12 );
+
+save( "MVBivar6", z );
+
+interact( z );
+
+#############################################################################
+# 7-10 are bisector problems, two equations and four unknowns. The solution is
+#    in R^4 - the parameter space(s) of both surfaces, and mapped in post
+#    processing to the bisector surface in R^3.
+
+# 7. The bisector of a convex bi-quadratic surface and a plane.
+
+s1 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) ) * tx( -1 ) * ty( -1 );
+color( s1, red );
+
+s2 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  2 ),
+	            ctlpt( E3, 1,  0,  1 ),
+	            ctlpt( E3, 2,  0,  2 ) ),
+	      list( ctlpt( E3, 0,  1,  1 ),
+	            ctlpt( E3, 1,  1,  0 ),
+	            ctlpt( E3, 2,  1,  1 ) ),
+	      list( ctlpt( E3, 0,  2,  2 ),
+	            ctlpt( E3, 1,  2,  1 ),
+	            ctlpt( E3, 2,  2,  2 ) ) ) )* tx( -1 ) * ty( -1 );
+color( s2, magenta );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.01, 1e-10 );
+
+save( "MVBivar7", list( s1, s2, mb1 ) );
+
+interact( list( s1, s2, mb1 ) );
+
+# 8. The bisector of a non-convex bi-quadratic surface and a plane.
+
+s1 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  2 ),
+	            ctlpt( E3, 1,  0,  1 ),
+	            ctlpt( E3, 2,  0,  2 ) ),
+	      list( ctlpt( E3, 0,  1,  1 ),
+	            ctlpt( E3, 1,  1,  5 ),
+	            ctlpt( E3, 2,  1,  1 ) ),
+	      list( ctlpt( E3, 0,  2,  2),
+	            ctlpt( E3, 1,  2,  1 ),
+	            ctlpt( E3, 2,  2,  2 ) ) ) );
+color( s1, red );
+
+s2 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  1 ),
+	            ctlpt( E3, 1,  0,  1 ),
+	            ctlpt( E3, 2,  0,  1 ) ),
+	      list( ctlpt( E3, 0,  1,  1 ),
+	            ctlpt( E3, 1,  1,  1 ),
+	            ctlpt( E3, 2,  1,  1 ) ),
+	      list( ctlpt( E3, 0,  2,  1 ),
+	            ctlpt( E3, 1,  2,  1 ),
+	            ctlpt( E3, 2,  2,  1 ) ) ) );
+color( s2, magenta );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.001, 1e-10 );
+
+save( "MVBivar8", list( s1, s2, mb1 ) );
+
+interact( list( s1, s2, mb1 ) );
+
+# 9. The bisector of two saddles. 
+
+s1 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  2 ),
+	            ctlpt( E3, 1,  0,  1 ),
+	            ctlpt( E3, 2,  0,  2 ) ),
+	      list( ctlpt( E3, 0,  1,  -1 ),
+	            ctlpt( E3, 1,  1,  2 ),
+	            ctlpt( E3, 2,  1,  -1 ) ),
+	      list( ctlpt( E3, 0,  2,  2),
+	            ctlpt( E3, 1,  2,  1 ),
+	            ctlpt( E3, 2,  2,  2 ) ) ) );
+color( s1, red );
+
+s2 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  -2 ),
+	            ctlpt( E3, 1,  0,  1),
+	            ctlpt( E3, 2,  0,  -2) ),
+	      list( ctlpt( E3, 0,  1,   -1),
+	            ctlpt( E3, 1,  1,   -2),
+	            ctlpt( E3, 2,  1,  -1 ) ),
+	      list( ctlpt( E3, 0,  2,  -2),
+	            ctlpt( E3, 1,  2,  1 ),
+	            ctlpt( E3, 2,  2,  -2 ) ) ) );
+color( s2, magenta );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.005, 1e-10 );
+
+save( "MVBivar9", list( s1, s2, mb1 ) );
+
+interact( list( s1, s2, mb1 ) );
+
+# 10. The bisector of two bi-quadratic surfaces, with complicated self 
+#     intersections.
+
+s1 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+	            ctlpt( E3, 1,  0,  4 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  1,  2 ),
+	            ctlpt( E3, 1,  1,  4 ),
+	            ctlpt( E3, 2,  1,  2 ) ),
+	      list( ctlpt( E3, 0,  2,  0),
+	            ctlpt( E3, 1,  2,  4 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+color( s1, red );
+
+s2 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  3 ),
+	            ctlpt( E3, 1,  0,  4 ),
+	            ctlpt( E3, 2,  0,  3 ) ),
+	      list( ctlpt( E3, 0,  1,  6 ),
+	            ctlpt( E3, 1,  1,  7 ),
+	            ctlpt( E3, 2,  1,  6 ) ),
+	      list( ctlpt( E3, 0,  2,  3 ),
+	            ctlpt( E3, 1,  2,  4 ),
+	            ctlpt( E3, 2,  2,  3 ) ) ) );
+color( s2, magenta );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.001, 1e-10 );
+
+save( "MVBivar10", list( s1, s2, mb1 ) );
+
+interact( list( s1, s2, mb1 ) );
+
+#############################################################################
+
+MVpllns = iritstate("MVBivarOutPllns", MVpllns );
+
+free( MVpllns );
+free( SubdivTol );
+free( M );
+free( Z );
+free( s1 );
+free( s2 );
+free( ms1 );
+free( ms2 );
+free( mb1 );

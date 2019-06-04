@@ -1,0 +1,51 @@
+
+PeanoBase = ctlpt( E2, -1, -1 ) +
+	    ctlpt( E2, -1,  1 ) +
+	    ctlpt( E2,  0,  1 ) +
+	    ctlpt( E2,  0, -1 ) +
+	    ctlpt( E2,  1, -1 ) +
+	    ctlpt( E2,  1,  1 );
+
+PeanoCrv = function( peanoBase ): PeanoBase2:
+    PeanoBase2 = PeanoBase * ty( -3 ) +
+	         -PeanoBase * sy( -1 ) +
+	         PeanoBase * ty( 3 ):
+    return = ( PeanoBase2 * tx( -3 ) +
+	       -PeanoBase2 * sx( -1 ) +
+	       PeanoBase2 * tx( 3 ) ) * sc( 1/3 );
+
+#############################################################################
+
+view( list( axes, PeanoBase ), 1 );
+
+Peano1 = PeanoCrv( PeanoBase ) * sc( 3/4 ):
+view( list( axes, Peano1 ), 1 );
+
+Peano2 = PeanoCrv( PeanoCrv( PeanoBase ) ) * sc( 3/4 * 12/13 ):
+view( list( axes, Peano2 ), 1 );
+
+Peano3 = PeanoCrv( PeanoCrv( PeanoCrv( PeanoBase ) ) )
+						 * sc( 3/4 * 12/13 * 39/40 ):
+view( list( axes, Peano3 ), 1 );
+
+Peano4 = PeanoCrv( PeanoCrv( PeanoCrv( PeanoCrv( PeanoBase ) ) ) )
+				 * sc( 3/4 * 12/13 * 39/40 * 120/121 ):
+view( list( axes, Peano4 ), 1 );
+
+All = list( Peano1 * tx( -6 ),
+	    Peano2 * tx( -2 ),
+	    Peano3 * tx(  2 ),
+	    Peano4 * tx(  6 ) );
+
+free( PeanoBase );
+free( Peano1 );
+free( Peano2 );
+free( Peano3 );
+free( Peano4 );
+
+save( "peanocrv", All );
+
+interact( All );
+
+free( All );
+

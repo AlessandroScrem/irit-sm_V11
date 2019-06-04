@@ -1,0 +1,202 @@
+
+#
+# Simulations of cyclic paths of length-k over curves and surfaces.
+#
+
+MakeLinesThroughPt = function( f, t, d ): Pt:
+    Pt = ceval( f, t ):
+    return = list( Pt * tx( -d ) + Pt * tx( d ),
+	           Pt * ty( -d ) + Pt * ty( d ) );
+
+MakeLinesCyclePts = function( f, sol ): i:
+    return = nil():
+    for ( i = 1, 1, sizeof( sol ),
+        snoc( MakeLinesThroughPt( f, coord( sol, i ), 2 ), return ) );
+
+Diag = ctlpt( E2, 0, 0 ) + ctlpt( E2, 2, 2 );
+attrib( Diag, "rgb", "20, 125, 100" );
+
+Diag2 = ctlpt( E2, -2, -2 ) + ctlpt( E2, 2, 2 );
+attrib( Diag2, "rgb", "20, 125, 100" );
+
+#################################
+
+f = cbspline( 2,
+	      list( ctlpt( E2,  0.0,  2.0 ),
+		    ctlpt( E2,  0.6,  0.3 ),
+		    ctlpt( E2,  2.0,  1.5 ) ),
+	      list( kv_open ) );
+attrib( f, "rgb", "150, 20, 25" );
+
+sol = ctrlcycle( f, 3, 0.001, 1e-8 );
+
+sizeof( sol );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 1 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 2 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 3 ) ) ), 1 );
+
+save( "control1", list( Diag, f, MakeLinesCyclePts( f, nth( sol, 2 ) ) ) );
+
+sol = ctrlcycle( f, 5, 0.001, 1e-8 );
+
+sizeof( sol );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 1 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 2 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 3 ) ) ), 1 );
+
+save( "control2", list( Diag, f, MakeLinesCyclePts( f, nth( sol, 3 ) ) ) );
+
+#################################
+
+f = cbspline( 4,
+    list( ctlpt( E3, 0.335, 1.52, 0 ),
+          ctlpt( E2, 0.0779, 1.16 ),
+          ctlpt( E2, 0.000139, 0.0435 ),
+          ctlpt( E2, 0.819, 0.0997 ),
+          ctlpt( E2, 1.05, 0.639 ),
+          ctlpt( E2, 1.78, 1 ) ),
+    list( kv_open ) );
+attrib( f, "rgb", "150, 20, 25" );
+
+sol = ctrlcycle( f, 3, 0.001, 1e-8 );
+
+sizeof( sol );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 1 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 2 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 3 ) ) ), 1 );
+
+view( list( Diag, f, MakeLinesCyclePts( f, nth( sol, 4 ) ) ), 1 );
+
+save( "control3", list( Diag, f, MakeLinesCyclePts( f, nth( sol, 3 ) ) ) );
+
+#################################
+#
+# y=x^2-1.7781
+#
+Parab = coerce( coerce( coerce( mvexplicit( 1, "A^2 - 1.7781" ), curve_type ),
+	                bezier_type ),
+		E2 ) * rz( 90 );
+Parab = cregion( Parab, -2, 2 );
+
+sol = ctrlcycle( Parab, 3, 0.001, 1e-8 );
+
+sizeof( sol );
+
+view( list( Diag2, Parab, MakeLinesCyclePts( Parab, nth( sol, 1 ) ) ), 1 );
+
+save( "control4",
+      list( Diag2, Parab, MakeLinesCyclePts( Parab, nth( sol, 3 ) ) ) );
+
+#################################
+#
+# Bivariate surfaces case:
+# 
+# u=(1-c)x+4cy(1-y), v=(1-c)y+4cx(1-x), for c=0.643 and c = 0.9
+#
+
+CtrlUFunc = function( x, y, c ):
+    return = (1-c) * x + 4 * c * y * (1-y);
+CtrlVFunc = function( x, y, c ):
+    return = (1-c) * y + 4 * c * x * (1-x);
+CtrlEvalUV = procedure( x, y, c ):
+    printf( "Eval( %15.13f %15.13f ) = %15.13f %15.13f\\n",
+	    list( x, y, CtrlUFunc( x, y, c ), CtrlVFunc( x, y, c ) ) );
+CtrlEvalUVIdx = procedure( Srf, s, c, i ):
+    printf( " [%12.10f %12.10f] -> ",
+	    list( coord( s, i * 2 + 1 ), coord( s, i * 2 + 2 ) ) ):
+    printf( " [%12.10f %12.10f]\\n",
+	    list( CtrlUFunc( coord( s, i * 2 + 1 ),
+			     coord( s, i * 2 + 2 ), c ),
+		  CtrlVFunc( coord( s, i * 2 + 1 ),
+			     coord( s, i * 2 + 2 ), c ) ) );
+CtrlPrintSol = procedure( Srf, Sol, c ): i: j:
+    for ( i = 1, 1, sizeof( sol ),
+        s = nth( sol, i ):
+	printf( "Sol %3d:", list( i ) ):
+	for ( j = 0, 1, sizeof( s ) / 2 - 1,
+            CtrlEvalUVIdx( Srf, s, c, j ):
+            if ( j == sizeof( s ) / 2 - 1,
+		printf( "\\n", nil() ),
+		printf( "\\t", nil() ) ) ) );
+CtrlDrawSol = function( Srf, Sol, Clr ): i: j: pl:
+    return = nil():
+    for ( i = 1, 1, sizeof( sol ),
+	pl = nil():
+        s = nth( sol, i ):
+	for ( j = 1, 1, sizeof( s ) / 2,
+	    snoc( point( coord( s, j * 2 - 1 ), coord( s, j * 2 ), 0 ), pl ) ):
+	snoc( point( coord( s, 1 ), coord( s, 2 ), 0 ), pl ):
+	pl = poly( pl, true ):
+	return = return + list( pl * sx( 1 ) ) ):
+    attrib( return, "rgb", Clr );
+
+Srf1 = mvexplicit( 2, "0.357 * A + 4 * 0.643 * B - 4 * 0.643 * B^2" );
+Srf1 = coerce( coerce( Srf1, surface_type ), bezier_type );
+
+Srf2 = mvexplicit( 2, "0.357 * B + 4 * 0.643 * A - 4 * 0.643 * A^2" );
+srf2 = coerce( coerce( Srf2, surface_type ), bezier_type );
+
+Srf = ffmerge( list( Srf1, Srf2 ), E2 );
+srf = coerce( sregion( sregion( Srf, row, -2, 2 ), col, -2, 2 ), bspline_type );
+srf = sreparam( sreparam( Srf, row, -2, 2 ), col, -2, 2 );
+view( list( axes, Srf ), 1 );
+
+sol = ctrlcycle( Srf, 3, 0.001, 1e-8 );
+CtrlPrintSol( Srf, sol, 0.643 );
+sol3 = CtrlDrawSol( Srf, sol, "255, 0, 255" );
+viewobj( sol3 );
+
+sol = ctrlcycle( Srf, 2, 0.001, 1e-8 );
+CtrlPrintSol( Srf, sol, 0.643 );
+sol2 = CtrlDrawSol( Srf, sol, "0, 255, 255" );
+viewobj( sol2 );
+
+# CtrlEvalUV( -0.1121684873, 0.5845635106, 0.643 );
+
+#################################
+
+Srf1 = mvexplicit( 2, "0.1 * A + 4 * 0.9 * B - 4 * 0.9 * B^2" );
+Srf1 = coerce( coerce( Srf1, surface_type ), bezier_type );
+
+Srf2 = mvexplicit( 2, "0.1 * B + 4 * 0.9 * A - 4 * 0.9 * A^2" );
+srf2 = coerce( coerce( Srf2, surface_type ), bezier_type );
+
+Srf = ffmerge( list( Srf1, Srf2 ), E2 );
+srf = coerce( sregion( sregion( Srf, row, -2, 2 ), col, -2, 2 ), bspline_type );
+srf = sreparam( sreparam( Srf, row, -2, 2 ), col, -2, 2 );
+view( list( axes, Srf ), 1 );
+
+sol = ctrlcycle( Srf, 3, 0.001, 1e-8 );
+CtrlPrintSol( Srf, sol, 0.9 );
+sol3 = CtrlDrawSol( Srf, sol, "255, 0, 255" );
+viewobj( sol3 );
+
+save( "control5", list( Srf, Sol ) );
+
+sol = ctrlcycle( Srf, 2, 0.001, 1e-8 );
+CtrlPrintSol( Srf, sol, 0.9 );
+sol2 = CtrlDrawSol( Srf, sol, "0, 255, 255" );
+viewobj( sol2 );
+
+#################################
+
+free( srf1 );
+free( srf2 );
+free( srf );
+
+free( Diag );
+free( Diag2 );
+free( Parab );
+free( f );
+free( Sol );
+free( Sol2 );
+free( Sol3 );

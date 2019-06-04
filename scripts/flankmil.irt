@@ -1,0 +1,163 @@
+#
+# Line tangent to a surface analysis (for Flank milling, wire EDM, hot wire
+# cutting, etc.)
+#
+#				Gershon Elber, July 2014
+#
+
+iritstate( "RandomInit", 1960 );  # Seed-initiate the randomizer
+
+c1 = cbspline( 4,
+               list( ctlpt( E2, 0.1, 0.0 ),
+                     ctlpt( E2, 0.3, 0.5 ),
+                     ctlpt( E2, 0.4, 1.0 ),
+                     ctlpt( E2, 0.3, 1.5 ),
+                     ctlpt( E2, 0.2, 2.0 ) ),
+               list( KV_OPEN ) ) * ry( -90 );
+color( c1, red );
+
+#################################
+
+Srf = sFromCrvs( list( c1 * tx( -1 ) * sz( 0.3 ),
+		       c1 * tx( -0.3 ) * tz( 0.3 ),
+		       c1 * tx(  0.3 ) * tz( 0.34 ),
+		       c1 * tx(  1 ) * sz( 0.3 ) ),
+		 4, kv_open ) * sy( 4 );
+Srf = sreparam( Srf, row, 2, 4 );
+color( Srf, green );
+
+path1 = FMLnAnal( Srf, 0.06, true, 20, 0.01, 1e-10 );
+color( nref( path1, 1 ), red );
+color( nref( path1, 2 ), yellow );
+adwidth( path1, 3 );
+
+path2 = FMLnAnal( Srf, 0.02, true, 20, 0.01, 1e-10 );
+color( nref( path2, 1 ), red );
+color( nref( path2, 2 ), yellow );
+adwidth( path2, 3 );
+
+path3 = FMLnAnal( Srf, 0.01, true, 20, 0.005, 1e-10);
+color( nref( path3, 1 ), red );
+color( nref( path3, 2 ), yellow );
+adwidth( path3, 3 );
+
+All = list( list( Srf, path1 ) * tx( -3 ),
+	    list( Srf, path2 ) * tx( 0 ),
+	    list( Srf, path3 ) * tx( 3 ) );
+
+interact( All );
+
+save( "flnk1mil", All );
+
+#################################
+
+Srf = sFromCrvs( list( c1 * tz( 1 ) * ry( 50 ),
+		       c1 * sz( 5 ) * tz( 1 ) * ry( 20 ),
+		       c1 * sz( 5 ) * tz( 1 ) * ry( -20 ),
+		       c1 * tz( 1 ) * ry( -50 ) ),
+		 4, kv_open ) * sy( 4 );
+color( Srf, green );
+
+path1 = FMLnAnal( Srf, 0.05, true, 20, 0.01, 1e-10 );
+color( nref( path1, 1 ), red );
+color( nref( path1, 2 ), yellow );
+adwidth( path1, 3 );
+
+srfr = sreverse( Srf );
+color( Srfr, green );
+
+path2 = FMLnAnal( Srfr, 0.05, true, 20, 0.01, 1e-10 );
+color( nref( path2, 1 ), red );
+color( nref( path2, 2 ), yellow );
+adwidth( path2, 3 );
+
+All = list( list( Srf, path1 ) * tx( -2 ),
+	    list( Srf, path2 ) * tx( 2 ) );
+
+interact( All );
+
+save( "flnk2mil", All );
+
+free( Srfr );
+
+#################################
+
+Srf = sFromCrvs( list( c1,
+		       c1 * tz( 1 ) * tx( 1 ),
+		       c1 * sz( 5 ) * tx( 2 ),
+		       c1 * tx( 3 ),
+		       c1 * sz( 6 ) * tx( 4 ),
+		       c1 * tx( 5 ) ),
+		 4, kv_open ) * sz( 0.5 );
+srf = sreverse( Srf );
+color( Srf, green );
+
+path1 = FMLnAnal( Srf, 0.075, true, 30, 0.005, 1e-10 );
+color( nref( path1, 1 ), red );
+color( nref( path1, 2 ), yellow );
+adwidth( path1, 3 );
+
+path2 = FMLnAnal( Srf, 0.04, true, 30, 0.005, 1e-10 );
+color( nref( path2, 1 ), red );
+color( nref( path2, 2 ), yellow );
+adwidth( path2, 3 );
+
+All = list( list( Srf, path1 ) * tx( -3 ),
+	    list( Srf, path2 ) * tx( 3 ) );
+
+interact( All );
+
+save( "flnk3mil", All );
+
+#################################
+
+c1 = cregion( pcircle( vector( 0.0, 0.0, 0.0 ), 1 ), 0, 1 ) * ry( -90 );
+
+Srf = surfPrev( -c1 );
+color( Srf, green );
+
+path1 = FMLnAnal( Srf, 0.05, true, 40, 0.005, 1e-10 );
+color( nref( path1, 1 ), red );
+color( nref( path1, 2 ), yellow );
+adwidth( path1, 3 );
+
+#
+# The precise number for a precise shphere is 0.31225 (sin(acos(1-0.05)):
+#
+bb = bbox( nth( nth( path1, 1 ), 1 ) );
+printf( "Deviation of 1st tool path in Z is %f to %f\\n",
+	list( nth( bb, 5 ), nth( bb, 6 ) ) );
+
+Srf2 = sregion( Srf, col, 0, 1 );
+color( Srf2, green );
+
+path2 = FMLnAnal( Srf2, 0.02, true, 40, 0.01, 1e-10 );
+color( nref( path2, 1 ), red );
+color( nref( path2, 2 ), yellow );
+adwidth( path2, 3 );
+
+path3 = FMLnAnal( Srf2, 0.01, true, 40, 0.01, 1e-10 );
+color( nref( path3, 1 ), red );
+color( nref( path3, 2 ), yellow );
+adwidth( path3, 3 );
+
+All = list( list( Srf, path1 ) * tx( -3 ),
+	    list( Srf2, path2 ) * tx( 0 ),
+	    list( Srf2, path3 ) * tx( 3 ) );
+
+interact( All );
+
+save( "flnk4mil", All );
+
+free( Srf2 );
+free( bb );
+
+#################################
+
+free( c1 );
+free( Srf );
+free( path1 );
+free( path2 );
+free( path3 );
+free( All );
+

@@ -1,0 +1,78 @@
+#
+# Some simple polygonal subdivision surfaces test.
+#
+#						Gershon Elber, June 2014.
+#
+
+b = box( vector( -1, -1, -1 ), 2, 2, 2 );
+
+#################################
+
+bCatmulRom = psubdiv( b, 0, 1, 1, 1, 0 );
+bLoop = psubdiv( b, 1, 1, 1, 1, 0 );
+bButterfly = psubdiv( b, 2, 1, 1, 1, 0 );
+
+All =  list( b * tx( 6 ),
+	     bCatmulRom * tx( 3 ),
+	     bLoop * tx( 0 ),
+	     bButterfly * tx( -3 ) );
+
+interact( All );
+
+save( "psubdiv1", All );
+
+#################################
+
+bCatmulRom = psubdiv( b, 0, 3, 1, 1, 0 );
+bLoop = psubdiv( b, 1, 3, 1, 1, 0 );
+bButterfly = psubdiv( b, 2, 3, 0, 0, 0 );
+
+All = list( b * tx( 6 ),
+	    bCatmulRom * tx( 3 ),
+	    bLoop * tx( 0 ),
+	    bButterfly * tx( -3 ) );
+
+interact( All );
+
+save( "psubdiv2", All );
+
+#################################
+
+bCatmulRom = psubdiv( b, 0, 4, 0, 0, 0 );
+bLoop = psubdiv( b, 1, 4, 0, 0, 0 );
+bButterfly = psubdiv( b, 2, 4, 0, 0, 0 );
+
+All = list( b * tx( 6 ),
+	    bCatmulRom * tx( 3 ),
+	    bLoop * tx( 0 ),
+	    bButterfly * tx( -3 ) );
+
+interact( All );
+
+save( "psubdiv3", All );
+
+#################################
+
+bButterfly1 = psubdiv( b, 2, 3, 0, 0, 0 );
+bButterfly2 = psubdiv( b, 2, 3, 0, 0, 0.02 );
+bButterfly3 = psubdiv( b, 2, 3, 0, 0, -0.02 );
+
+All = list( b * tx( 8 ),
+	    bButterfly1 * tx( 4 ),
+	    bButterfly2 * tx( 0 ),
+	    bButterfly3 * tx( -4 ) );
+
+interact( All );
+
+save( "psubdiv4", All );
+
+#################################
+
+free( b );
+free( bCatmulRom );
+free( bLoop );
+free( bButterfly );
+free( bButterfly1 );
+free( bButterfly2 );
+free( bButterfly3 );
+free( All );

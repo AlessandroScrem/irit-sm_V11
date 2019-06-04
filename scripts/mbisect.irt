@@ -1,0 +1,258 @@
+#
+# Bisectors using multivariates
+#
+#
+#                       Gershon Elber, August 1997.
+#
+
+mvb = iritstate("MVBivarOutPllns", 0);
+
+#############################################################################
+# Surface - Surface bisectors.
+#############################################################################
+
+s1 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) ) * tx( -1 ) * ty( -1 );
+color( s1, red );
+
+s2 = sbezier(
+	list( list( ctlpt( E3, 0,  0,  2 ),
+	            ctlpt( E3, 1,  0,  1 ),
+	            ctlpt( E3, 2,  0,  2 ) ),
+	      list( ctlpt( E3, 0,  1,  1 ),
+	            ctlpt( E3, 1,  1,  0 ),
+	            ctlpt( E3, 2,  1,  1 ) ),
+	      list( ctlpt( E3, 0,  2,  2 ),
+	            ctlpt( E3, 1,  2,  1 ),
+	            ctlpt( E3, 2,  2,  2 ) ) ) )* tx( -1 ) * ty( -1 );
+color( s2, magenta );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.01, 1e-10 );
+
+interact( list( s1, s2, mb1 ) );
+
+save( "mbisect1", list( s1, s2, mb1 ) );
+
+#############################################################################
+
+s1 = s1 * sc( 1.5 ) * rx( 20 );
+color( s1, red );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.01, 1e-10 );
+
+interact( list( s1, s2, mb1 ) );
+
+save( "mbisect2", list( s1, s2, mb1 ) );
+
+#############################################################################
+
+s1 = s2 * tz( 0.5 );
+color( s1, red );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.01, 1e-10 );
+
+interact( list( s1, s2, mb1 ) );
+
+save( "mbisect3", list( s1, s2, mb1 ) );
+
+#############################################################################
+
+s1 = s2 * rx( 180 ) * sz( 0.7 ) * rx( 0 ) * tz( 3.5 );
+color( s1, red );
+
+ms1 = coerce( s1, multivar_type );
+ms2 = coerce( s2, multivar_type );
+
+mb1 = mbisector( ms1, ms2, 2, 0.01, 1e-10 );
+
+interact( list( s1, s2, mb1 ) );
+
+save( "mbisect4", list( s1, s2, mb1 ) );
+
+#############################################################################
+# Curve - Surface bisectors.
+#############################################################################
+
+c = cbezier( list( ctlpt( E3,  1,  1,  0 ),
+		   ctlpt( E3,  1,  2,  2 ) ) );
+color( c, red );
+
+s = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+color( s, magenta );
+
+mc = coerce( c, multivar_type );
+ms = coerce( s, multivar_type );
+
+# mb1 = mbisector( mc, ms, 3, 0.001, 1e-10 );
+mb1 = mbisector( mc, ms, 3, 0.01, 1e-10 );
+
+interact( list( c, s, mb1 ) );
+
+save( "mbisect5", list( c, s, mb1 ) );
+
+#############################################################################
+
+c = cbezier( list( ctlpt( E3,  0,  0,  2 ),
+		   ctlpt( E3,  2,  1,  1.1 ),
+		   ctlpt( E3,  2,  2,  1 ) ) );
+color( c, red );
+
+s = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+color( s, magenta );
+
+mc = coerce( c, multivar_type );
+ms = coerce( s, multivar_type );
+
+mb1 = mbisector( mc, ms, 2, 0.01, 1e-10 );
+
+interact( list( c, s, mb1 ) );
+
+save( "mbisect6", list( c, s, mb1 ) );
+
+#############################################################################
+
+c = cbezier( list( ctlpt( E3,    0,    0,   2 ),
+		   ctlpt( E3,  0.6,  0.5, 1.1 ),
+		   ctlpt( E3,  1.4,  1.4,   2 ),
+		   ctlpt( E3,    2.5,    2,   1 ) ) );
+color( c, red );
+
+s = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+color( s, magenta );
+
+mc = coerce( c, multivar_type );
+ms = coerce( s, multivar_type );
+
+mb1 = mbisector( mc, ms, 3, 0.01, 1e-10 );
+
+interact( list( c, s, mb1 ) );
+
+save( "mbisect7", list( c, s, mb1 ) );
+
+#############################################################################
+
+c = cbezier( list( ctlpt( E3,  1,  2,  2 ),
+		   ctlpt( E3,  1,  1,  0 ),
+		   ctlpt( E3,  1,  0,  0.5 ) ) );
+color( c, red );
+
+s = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+		    ctlpt( E3, 1,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  1,  0 ),
+		   ctlpt( E3, 1,  1,  -2 ),
+	            ctlpt( E3, 2,  1,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 1,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+color( s, magenta );
+
+mc = coerce( c, multivar_type );
+ms = coerce( s, multivar_type );
+
+mb1 = mbisector( mc, ms, 2, 0.005, 1e-10 );
+
+interact( list( c, s, mb1 ) );
+
+save( "mbisect8", list( c, s, mb1 ) );
+
+#############################################################################
+
+c = cbezier( list( ctlpt( E3,  1,  2,  0 ),
+		   ctlpt( E3,  1,  1,  -1 ),
+		   ctlpt( E3,  1,  0,  0 ) ) );
+color( c, red );
+
+s = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+		    ctlpt( E3, 1,  0,  -4 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  1,  0 ),
+		    ctlpt( E3, 1,  1,  -6 ),
+	            ctlpt( E3, 2,  1,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 1,  2,  -4 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+color( s, magenta );
+
+mc = coerce( c, multivar_type );
+ms = coerce( s, multivar_type );
+
+mb1 = mbisector( mc, ms, 2, 0.003, 1e-10 );
+
+interact( list( c, s, mb1 ) );
+
+save( "mbisect9", list( c, s, mb1 ) );
+
+#############################################################################
+
+c = cbezier( list( ctlpt( E3,  1,  2,  2 ),
+				   ctlpt( E3,  1,  1.5,  0 ),
+				   ctlpt( E3,  1,  1,  4 ),
+				   ctlpt( E3,  1,  0.5,  0 ),
+		           ctlpt( E3,  1,  0,  2 ) ) );
+color( c, red );
+
+s = sbezier(
+	list( list( ctlpt( E3, 0,  0,  0 ),
+		    ctlpt( E3, 1,  0,  0 ),
+	            ctlpt( E3, 2,  0,  0 ) ),
+	      list( ctlpt( E3, 0,  1,  0 ),
+		    ctlpt( E3, 1,  1,  1 ),
+	            ctlpt( E3, 2,  1,  0 ) ),
+	      list( ctlpt( E3, 0,  2,  0 ),
+	            ctlpt( E3, 1,  2,  0 ),
+	            ctlpt( E3, 2,  2,  0 ) ) ) );
+	            
+color( s, magenta );
+
+mc = coerce( c, multivar_type );
+ms = coerce( s, multivar_type );
+
+mb1 = mbisector( mc, ms, 2, 0.005, 1e-10 );
+
+interact( list( c, s, mb1 ) );
+
+save( "mbisect10", list( c, s, mb1 ) );
+
+#############################################################################
+
+mvb = iritstate( "MVBivarOutPllns", mvb );
+free( mvb );
+
+free( c );
+free( s );
+free( mc );
+free( ms );
+
+free( s1 );
+free( s2 );
+free( ms1 );
+free( ms2 );
+
+free( mb1 );

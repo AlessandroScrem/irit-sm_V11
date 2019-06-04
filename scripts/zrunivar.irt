@@ -1,0 +1,282 @@
+#
+# Some tests for the univariate solver (using the multivariate solver... )
+#
+# 				Gershon Elber, January 2014
+#
+
+Crv1 = cbspline( 3,
+    list( ctlpt( E1,   0.284552 ),
+          ctlpt( E1,   0.398916 ),
+          ctlpt( E1,   0.156706 ),
+          ctlpt( E1, -0.0339618 ),
+          ctlpt( E1,   0.071549 ),
+          ctlpt( E1,    0.14966 ),
+          ctlpt( E1,   0.316587 ),
+          ctlpt( E1,  0.0924878 ),
+          ctlpt( E1,  0.0598898 ),
+          ctlpt( E1, -0.0177831 ),
+          ctlpt( E1,  0.0160826 ),
+          ctlpt( E1,   0.170188 ),
+          ctlpt( E1,   0.284552 ) ),
+    list( kv_open ) );
+
+Crv2 = cbspline( 4,
+    list( ctlpt( E1,    0.66554 ),
+          ctlpt( E1,      0.675 ),
+          ctlpt( E1,   0.667952 ),
+          ctlpt( E1,    0.64961 ),
+          ctlpt( E1,   0.626378 ),
+          ctlpt( E1,   0.597575 ),
+          ctlpt( E1,   0.564496 ),
+          ctlpt( E1,   0.493763 ),
+          ctlpt( E1,   0.407367 ),
+          ctlpt( E1,   0.304897 ),
+          ctlpt( E1,   0.290232 ),
+          ctlpt( E1,   0.175969 ),
+          ctlpt( E1,   0.062111 ),
+          ctlpt( E1, -0.0291456 ),
+          ctlpt( E1,  -0.127808 ),
+          ctlpt( E1,  -0.219941 ),
+          ctlpt( E1,  -0.297794 ),
+          ctlpt( E1,  -0.317375 ),
+          ctlpt( E1,  -0.383328 ),
+          ctlpt( E1,  -0.434361 ),
+          ctlpt( E1,  -0.462584 ),
+          ctlpt( E1,  -0.497821 ),
+          ctlpt( E1,    -0.5186 ),
+          ctlpt( E1,  -0.526462 ),
+          ctlpt( E1,  -0.531367 ),
+          ctlpt( E1,  -0.543449 ),
+          ctlpt( E1,  -0.547178 ),
+          ctlpt( E1,   -0.54653 ),
+          ctlpt( E1,  -0.547808 ),
+          ctlpt( E1,  -0.536452 ),
+          ctlpt( E1,  -0.515022 ),
+          ctlpt( E1,  -0.504594 ),
+          ctlpt( E1,  -0.445822 ),
+          ctlpt( E1,  -0.214429 ),
+          ctlpt( E1,  0.0281867 ),
+          ctlpt( E1,  0.0953228 ),
+          ctlpt( E1,    0.12167 ),
+          ctlpt( E1,   0.144485 ),
+          ctlpt( E1,    0.16191 ),
+          ctlpt( E1,   0.172364 ),
+          ctlpt( E1,    0.18515 ),
+          ctlpt( E1,   0.187287 ),
+          ctlpt( E1,   0.185662 ),
+          ctlpt( E1,   0.178317 ),
+          ctlpt( E1,   0.161522 ),
+          ctlpt( E1,   0.138905 ),
+          ctlpt( E1,   0.116496 ),
+          ctlpt( E1,  0.0902305 ),
+          ctlpt( E1,   0.061891 ),
+          ctlpt( E1,  0.0113893 ),
+          ctlpt( E1,  -0.112799 ),
+          ctlpt( E1,  -0.226231 ),
+          ctlpt( E1,  -0.269784 ),
+          ctlpt( E1,  -0.291127 ),
+          ctlpt( E1,  -0.305945 ),
+          ctlpt( E1,  -0.312724 ),
+          ctlpt( E1,  -0.313576 ),
+          ctlpt( E1,    -0.3143 ),
+          ctlpt( E1,  -0.314895 ),
+          ctlpt( E1,  -0.317156 ),
+          ctlpt( E1,   -0.31754 ),
+          ctlpt( E1,  -0.315884 ),
+          ctlpt( E1,  -0.315538 ),
+          ctlpt( E1,  -0.315267 ),
+          ctlpt( E1,  -0.315001 ),
+          ctlpt( E1,  -0.314895 ),
+          ctlpt( E1,  -0.313962 ),
+          ctlpt( E1,  -0.313063 ),
+          ctlpt( E1,  -0.312077 ),
+          ctlpt( E1,  -0.312809 ),
+          ctlpt( E1,   -0.31303 ),
+          ctlpt( E1,  -0.312724 ),
+          ctlpt( E1,  -0.312465 ),
+          ctlpt( E1,  -0.311827 ),
+          ctlpt( E1,  -0.310801 ),
+          ctlpt( E1,  -0.310401 ),
+          ctlpt( E1,  -0.308141 ),
+          ctlpt( E1,   -0.30441 ),
+          ctlpt( E1,  -0.302899 ),
+          ctlpt( E1,   -0.30007 ),
+          ctlpt( E1,  -0.295865 ),
+          ctlpt( E1,  -0.294592 ),
+          ctlpt( E1,   -0.28441 ),
+          ctlpt( E1,   -0.25045 ),
+          ctlpt( E1,  -0.213856 ),
+          ctlpt( E1,  -0.146014 ),
+          ctlpt( E1, -0.0217473 ),
+          ctlpt( E1,  0.0759949 ),
+          ctlpt( E1,   0.103241 ),
+          ctlpt( E1,   0.159831 ),
+          ctlpt( E1,   0.206703 ),
+          ctlpt( E1,   0.213849 ),
+          ctlpt( E1,   0.215029 ),
+          ctlpt( E1,   0.223174 ),
+          ctlpt( E1,   0.204868 ),
+          ctlpt( E1,   0.151607 ),
+          ctlpt( E1,   0.139882 ),
+          ctlpt( E1,   0.108527 ),
+          ctlpt( E1,  0.0705141 ),
+          ctlpt( E1,  0.0418785 ),
+          ctlpt( E1,  0.0248686 ),
+          ctlpt( E1, 0.00912503 ),
+          ctlpt( E1, -0.00197896 ),
+          ctlpt( E1, -0.00578893 ),
+          ctlpt( E1, -0.00525296 ),
+          ctlpt( E1, 0.00237268 ),
+          ctlpt( E1, 0.00309423 ),
+          ctlpt( E1,  0.0159526 ),
+          ctlpt( E1,  0.0322032 ),
+          ctlpt( E1,  0.0493043 ),
+          ctlpt( E1,    0.10132 ),
+          ctlpt( E1,   0.158384 ),
+          ctlpt( E1,   0.215255 ),
+          ctlpt( E1,   0.261085 ),
+          ctlpt( E1,   0.317811 ),
+          ctlpt( E1,   0.366236 ),
+          ctlpt( E1,   0.372542 ),
+          ctlpt( E1,   0.470906 ),
+          ctlpt( E1,    0.55823 ),
+          ctlpt( E1,    0.66554 ) ),
+    list( 	 0,          0,          0,          0,   0.015625,   0.015625,   0.015625,    0.03125,
+           0.03125,    0.03125,     0.0625,     0.0625,     0.0625,  0.0666667,    0.09375,    0.09375,
+	   0.09375,      0.125,      0.125,      0.125,   0.133333,    0.15625,    0.15625,    0.15625,
+	    0.1875,     0.1875,     0.1875,        0.2,    0.21875,    0.21875,    0.21875,       0.25,
+	      0.25,       0.25,   0.266667,   0.333333,      0.375,      0.375,      0.375,   0.390625,
+	  0.390625,   0.390625,        0.4,    0.40625,    0.40625,    0.40625,   0.421875,   0.421875,
+	  0.421875,     0.4375,     0.4375,     0.4375,   0.466667,        0.5,        0.5,        0.5,
+	  0.519494,   0.519494,   0.519494,   0.521943,   0.521943,   0.521943,    0.53125,    0.53125,
+           0.53125,   0.533333,   0.534711,   0.534711,   0.534711,   0.546875,   0.546875,   0.546875,
+           0.55533,    0.55533,    0.55533,     0.5625,     0.5625,     0.5625,   0.578125,   0.578125,
+          0.578125,    0.59375,    0.59375,    0.59375,        0.6,      0.625,      0.625,      0.625,
+          0.666667,     0.6875,     0.6875,     0.6875,   0.733333,       0.75,       0.75,       0.75,
+               0.8,     0.8125,     0.8125,     0.8125,    0.84375,    0.84375,    0.84375,   0.859375,
+          0.859375,   0.859375,   0.866667,   0.867188,   0.867188,   0.867188,      0.875,      0.875,
+             0.875,    0.90625,    0.90625,    0.90625,   0.933333,     0.9375,     0.9375,     0.9375,
+                 1,          1,          1,          1 ) );
+
+Crv3 = cbspline( 4,
+    list( ctlpt( E1,   -1.29836 ),
+          ctlpt( E1,   -2.28868 ),
+          ctlpt( E1,   -3.42757 ),
+          ctlpt( E1,   -4.71503 ),
+          ctlpt( E1,   -4.88096 ),
+          ctlpt( E1,    -5.6681 ),
+          ctlpt( E1,   -7.07645 ),
+          ctlpt( E1,   -5.22547 ),
+          ctlpt( E1,   -3.79081 ),
+          ctlpt( E1,   -2.77247 ),
+          ctlpt( E1,   -2.08785 ),
+          ctlpt( E1,   -1.61019 ),
+          ctlpt( E1,   -1.33949 ),
+          ctlpt( E1,  -0.586794 ),
+          ctlpt( E1,  -0.155276 ),
+          ctlpt( E1,  -0.044933 ),
+          ctlpt( E1,   0.143222 ),
+          ctlpt( E1,  -0.162734 ),
+          ctlpt( E1,  -0.962801 ),
+          ctlpt( E1,  -0.927661 ),
+          ctlpt( E1,   -1.03951 ),
+          ctlpt( E1,   -1.29836 ) ),
+    list( kv_disc_open ) );
+
+crv4 = cbspline( 3,
+    list( ctlpt( E1, -0.00177833 ),
+          ctlpt( E1,  0.0172217 ),
+          ctlpt( E1,  -0.350778 ),
+          ctlpt( E1,   -1.19478 ),
+          ctlpt( E1,   -1.35778 ),
+          ctlpt( E1,   -1.15078 ),
+          ctlpt( E1,  -0.523778 ),
+          ctlpt( E1, -0.0207783 ),
+          ctlpt( E1, -0.00177833 ) ),
+    list( kv_open ) );
+
+Crv5 = cbspline( 3,
+    list( ctlpt( E1,   0.819717 ),
+          ctlpt( E1,   0.887848 ),
+          ctlpt( E1,   0.714419 ),
+          ctlpt( E1,  -0.178209 ),
+          ctlpt( E1,    0.41512 ),
+          ctlpt( E1,   -0.46486 ),
+          ctlpt( E1,  0.0819167 ),
+          ctlpt( E1,   0.751586 ),
+          ctlpt( E1,   0.819717 ) ),
+    list( kv_open ) );
+
+Crv6 = cbspline( 3,
+    list( ctlpt( E1,   0.601591 ),
+          ctlpt( E1,   0.620591 ),
+          ctlpt( E1,   0.252591 ),
+          ctlpt( E1,  -0.591409 ),
+          ctlpt( E1,   0.189591 ),
+          ctlpt( E1,  -0.547409 ),
+          ctlpt( E1,  0.0795906 ),
+          ctlpt( E1,   0.582591 ),
+          ctlpt( E1,   0.601591 ) ),
+    list( kv_open ) );
+
+Crv7 = cbspline( 3,
+    list( ctlpt( E1, 3.76951e-005 ),
+          ctlpt( E1, 2.20939e-009 ),
+          ctlpt( E1, -3.76951e-005 ) ),
+    list( kv_open ) );
+
+Crv8 = cbspline( 3,
+    list( ctlpt( E1,   0.429457 ),
+          ctlpt( E1,   0.606172 ),
+          ctlpt( E1,  -0.167187 ),
+          ctlpt( E1,  -0.393828 ),
+          ctlpt( E1,  -0.142309 ),
+          ctlpt( E1,  -0.102177 ),
+          ctlpt( E1,   0.456639 ),
+          ctlpt( E1,  0.0338944 ),
+          ctlpt( E1,  -0.152589 ),
+          ctlpt( E1,  -0.270317 ),
+          ctlpt( E1,  -0.115658 ),
+          ctlpt( E1,   0.252742 ),
+          ctlpt( E1,   0.429457 ) ),
+    list( kv_open ) );
+
+Crvs = list( Crv1, Crv2, Crv3, Crv4, Crv5, Crv6, Crv7, Crv8 );
+
+free( Crv1 );
+free( Crv2 );
+free( Crv3 );
+free( Crv4 );
+free( Crv5 );
+free( Crv6 );
+free( Crv7 );
+free( Crv8 );
+
+AllZeros = nil();
+for ( i = 1, 1, sizeof( Crvs ),
+    Crv = nth( Crvs, i ):
+    CrvE2 = coerce( Crv, e2 ):
+    color( CrvE2, Red ):
+    Zeros = mzero( list( coerce( Crv, multivar_type ) ), 0.001, 1e-10 ):
+    ZrPts = nil():
+    for ( j = 1, 1, sizeof( Zeros ),
+        snoc( ceval( CrvE2, coord( nth( Zeros, j ), 1 ) ),
+	      ZrPts ) ):
+    snoc( list( ZrPts * rz( -90 ), CrvE2 * rz( -90 ), Axes )
+							 * tx( i * 1.5 - 5 ),
+	  AllZeros ) );
+
+interact( AllZeros );
+
+save( "zrunivar1", AllZeros );
+
+free( i );
+free( j );
+free( Crvs );
+free( Crv );
+free( CrvE2 );
+free( Zeros );
+free( ZrPts );
+free( AllZeros );
+
+

@@ -1,0 +1,149 @@
+#
+# Some examples to manipulation of text in IRIT.
+#
+#				Gershon Elber, May 1996.
+#
+
+save_mat = view_mat;
+
+textGeom3dAux = function( Ply, Wdth, Dpth ):
+    return = nil():
+    if ( thisobj("Ply" ) == curve_type,
+	return = extrude( -Ply, vector( 0.0, 0.0, Dpth ), 0 ) ):
+    if ( thisobj("Ply" ) == poly_type,
+	return = extrude( ruledSrf( offset( Ply, -Wdth / 2, 0, 0 ),
+			            offset( Ply,  Wdth / 2, 0, 0 ) ),
+			  vector( 0.0, 0.0, Dpth ), 3 ) );
+
+textGeom3d = function( Txt, Wdth, Dpth ):
+    return = 1;
+textGeom3d = function( Txt, Wdth, Dpth ): i:
+    if ( thisobj( "Txt" ) == list_type,
+	return = nil():
+	for ( i = 1, 1, sizeof( Txt ),
+	     snoc( textGeom3d( nth( Txt, i ), Wdth, Dpth ),
+		   return ) ),
+	return = textGeom3dAux( Txt, Wdth, Dpth ) );
+
+TxtU = textgeom("ABCDEFGHIJKLMNOPQRSTUVWXYZ", vector( 0.02, 0, 0 ), 0.1 );
+TxtL = textgeom("a bcdefghijklmnopqrstuvwxyz", vector( 0.02, 0, 0 ), 0.1 );
+TxtN = textgeom("0 1  2   34567890#$&*()+-=;:/?.,", vector( 0.02, 0, 0 ), 0.1 );
+
+view_mat = sc( 0.8 ) * tx( -0.9 );
+All = list( TxtU,
+	    TxtL * ty( -0.2 ),
+	    TxtN * ty( -0.4 ) );
+
+interact( list( view_mat, All ) );
+
+save( "textgm1", list( view_mat, All ) );
+
+TxtU3d = textGeom3d( TxtU, 0.01, 0.1 );
+TxtL3d = textGeom3d( TxtL, 0.01, 0.1 );
+TxtN3d = textGeom3d( TxtN, 0.01, 0.1 );
+All = convex( list( TxtU3d,
+		    TxtL3d * ty( -0.2 ),
+		    TxtN3d * ty( -0.4 ) ) );
+
+interact( list( view_mat, All ) );
+
+save( "textgm2", list( view_mat, All ) );
+
+
+if ( machine == windows, # Use build in outline fonts.
+    view_mat = sc( 0.05 ) * tx( -0.9 ):
+    All = list( Text2Geom( "This is a test example of some 3D text",
+		           "Times New Roman",
+			   0, 0, 2, list( 0.012, 0.1 ), 0.001, 4 ),
+	        Text2Geom( "ABCDEFGHIJKLMNOPQRSTUVWXYZ (2D filled text)",
+		           "Helvetica",
+			   1, -50,  0, list( 0.02, 0.2 ), 0.001, 2 ) * ty( 5 ),
+	        Text2Geom( "abcdefghijklmnopqrstuvwxyz (B-spline outlines)",
+		           "Courier New",
+		           3, 20, 0, list( 0.02, 0.2 ), 0.001, 1 ) * ty( -5 ) ),
+    # Try freetype.  Font is actual ttf file name in the file system
+    view_mat = sc( 0.15 ) * tx( -0.9 ):
+    All = list( Text2Geom( "This is a test example of some 3D text",
+		           "/home/gershon/bin/S721-Script-One-Regular.ttf",
+			   0, 0, 0, list( 0.012, 0.1 ), 0.001, 4 ),
+	        Text2Geom( "ABCDEFGHIJKLMNOPQRSTUVWXYZ (2D filled text)",
+		           "/home/gershon/bin/times.ttf",
+			   1, 0.05,  2, list( 0.002, 0.2 ), 0.0001, 2 ) * ty( 5 ),
+	        Text2Geom( "abcdefghijklmnopqrstuvwxyz (B-spline outlines)",
+		           "/home/gershon/bin/times.ttf",
+			   3, 0.02, 0, list( 0.05, 0.2 ), 0.001, 1 ) * ty( -5 ) ) );
+
+interact( list( view_mat, All ) );
+
+save( "textgm3", list( view_mat, All ) );
+
+
+Str = "This is a test example of some text to test the layout code in IRIT. ";
+
+Circ = circle( vector( 0, 0, 0 ), 10 );
+
+if ( machine == windows, # Use build in outline fonts.
+    txt1 = TextLayShp( Str + Str + Str, "Courier New",
+	               3, 0.8, list( 10, 10, 34 ), 0.001, 0, list( 0.01, 0.5 ),
+		       3, 3, Circ ),
+    txt1 = TextLayShp( Str + Str + Str, "/home/gershon/bin/times.ttf",
+	               3, 3.6, list( 0.5, 25, 34 ), 0.001, 0, list( 0.01, 0.5 ),
+		       3, 3, Circ ) );
+
+Heart = cbspline( 4,
+    list( ctlpt( E2, 0, 0.6 ),
+          ctlpt( E2, 0.2, 1 ),
+          ctlpt( E2, 1, 1 ),
+          ctlpt( E1, 1.2 ),
+          ctlpt( E2, 0.8, -0.6 ),
+          ctlpt( E2, 0, -1 ),
+          ctlpt( E2, 0, -1 ),
+          ctlpt( E2, -0.8, -0.6 ),
+          ctlpt( E1, -1.2 ),
+          ctlpt( E2, -1, 1 ),
+          ctlpt( E2, -0.2, 1 ),
+          ctlpt( E2, 0, 0.6 ) ),
+    list( kv_open ) ) * sc( 10 );
+
+if ( machine == windows, # Use build in outline fonts.
+    txt2 = TextLayShp( Str + Str, "Courier New",
+	               3, 1.0, list( 10, 10, 34 ), 0.001, 0, list( 0.01, 0.5 ),
+		       1, 2, Heart ),
+    txt2 = TextLayShp( Str + Str, "/home/gershon/bin/times.ttf",
+	               3, 4.9, list( 1, 20, 34 ), 0.001, 0, list( 0.01, 0.5 ),
+		       1, 2, Heart ) );
+
+if ( machine == windows, # Use build in outline fonts.
+    txt3 = TextLayShp( Str + Str + Str + Str + Str + Str, "Times New Roman",
+	               0, 0.6, list( 10, 10, 40 ), 0.001, 0, list( 0.01, 0.5 ),
+		       3, 1, Heart ),
+    txt3 = TextLayShp( Str + Str + Str + Str + Str + Str,
+    	   	       "/home/gershon/bin/S721-Script-One-Regular.ttf",
+	               0, 2.7, list( 1, 20, 40 ), 0.001, 0, list( 0.01, 0.5 ),
+		       3, 1, Heart ) );
+
+view_mat = sc( 0.5 );
+All = list( list( circ, txt1 ) * tx( -25 ),
+	    list( Heart, txt2 ),
+	    list( Heart, txt3 ) * tx( 25 ) ) * sc( 0.05 );
+interact( list( All, view_mat ) );
+
+save( "textgm4", list( All ) );
+
+free( Str);
+free( Circ );
+free( Heart );
+free( txt1 );
+free( txt2 );
+free( txt3 );
+
+
+free( TxtU );
+free( TxtL );
+free( TxtN );
+free( TxtU3d );
+free( TxtL3d );
+free( TxtN3d );
+free( All );
+
+view_mat = save_mat;

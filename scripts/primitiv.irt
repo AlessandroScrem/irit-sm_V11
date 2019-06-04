@@ -1,0 +1,80 @@
+#
+# Display of all primitives of the system:
+# BOX, GBOX, CONE, CYLIN, SPHERE, TORUS
+#
+#				Created by Gershon Elber,	Dec. 88
+#
+
+view_mat2 = view_mat * scale(vector( 0.15, 0.15, 0.15 ));
+axes15 = axes * sc( 1.5 );
+
+GenAllPrims = function():
+    return = list(
+	list( axes15,
+	      box(vector(-0.5, -0.5, -0.5), 1.0, 1.0, 1.0),
+	      gbox(vector(-0.25, -0.25, -0.25), vector( 1.1, 0.1, 0.2),
+		   vector( 0.4, 0.9, 0.2), vector( 0.3, 0.05, 1.4)) ) * tx( -9 ),
+	list( axes15,
+	      cone(vector(-0.5, 0.0, 0.0), vector(-0.5, 0.0, 0.0), 0.5, 0),
+	      cone(vector( 0.5, 0.0, 0.0), vector( 0.5, 0.0, 0.0), 0.5, 0),
+	      cone(vector( 0.0,-0.5, 0.0), vector( 0.0,-0.5, 0.0), 0.5, 0),
+	      cone(vector( 0.0, 0.5, 0.0), vector( 0.0, 0.5, 0.0), 0.5, 0),
+	      cone(vector( 0.0, 0.0,-0.5), vector( 0.0, 0.0,-0.5), 0.5, 0),
+	      cone(vector( 0.0, 0.0, 0.5), vector( 0.0, 0.0, 0.5), 0.5, 0) ) * tx( -6 ),
+	list( axes15,
+	      cone(vector(-0.5, 0.0, 0.0), vector(-0.5, 0.0, 0.0), 0.5, 1),
+	      cone(vector( 0.5, 0.0, 0.0), vector( 0.5, 0.0, 0.0), 0.5, 1),
+	      cone(vector( 0.0,-0.5, 0.0), vector( 0.0,-0.5, 0.0), 0.5, 1),
+	      cone(vector( 0.0, 0.5, 0.0), vector( 0.0, 0.5, 0.0), 0.5, 1),
+	      cone(vector( 0.0, 0.0,-0.5), vector( 0.0, 0.0,-0.5), 0.5, 1),
+	      cone(vector( 0.0, 0.0, 0.5), vector( 0.0, 0.0, 0.5), 0.5, 1) ) * tx( -3 ),
+	list( axes15,
+	      cylin(vector(-0.8, 0.0, 0.0), vector(-0.5, 0.3, 0.3), 0.3, 0),
+	      cylin(vector( 0.8, 0.0, 0.0), vector( 0.8, 0.0, 0.0), 0.3, 1),
+	      cylin(vector( 0.0, 0.8, 0.0), vector( 0.0, 0.8, 0.0), 0.3, 2),
+	      cylin(vector( 0.0,-0.8, 0.0), vector( 0.1,-0.5, 0.2), 0.3, 3),
+	      cylin(vector( 0.0, 0.0,-0.8), vector( 0.4, 0.2,-0.5), 0.3, 3),
+	      cylin(vector( 0.0, 0.0, 0.8), vector( 0.0, 0.0, 0.8), 0.3, 1) ) * tx( 0 ),
+	list( axes15, sphere(vector( 0.0, 0.0, 0.0), 0.5) ) * tx( 3 ),
+	list( axes15, torus(vector( 0.0, 0.0, 0.0),
+			    vector( 0.1, 0.2, 1.0), 0.5, 0.2) ) * tx( 6 ) );
+
+#
+# Poly primitives
+#
+PType = Iritstate( "PrimType", 0 );
+All = GenAllPrims();
+interact( list( view_mat2, All ) );
+save( "Prim1Ply", All );
+
+#
+# Srf primitives
+#
+Iritstate( "PrimType", 1 );
+All = GenAllPrims();
+interact( list( view_mat2, All ) );
+save( "Prim2Srf", All );
+
+#
+# Model primitives
+#
+Iritstate( "PrimType", 2 );
+All = GenAllPrims();
+interact( list( view_mat2, All ) );
+save( "Prim3Mdl", All );
+
+#
+# Trivar primitives
+#
+Iritstate( "PrimType", 3 );
+All = GenAllPrims();
+interact( list( view_mat2, All ) );
+save( "Prim4Tvs", All );
+
+PType = Iritstate( "PrimType", PType );
+
+free( All );
+free( PType );
+free( axes15 );
+free( view_mat2 );
+

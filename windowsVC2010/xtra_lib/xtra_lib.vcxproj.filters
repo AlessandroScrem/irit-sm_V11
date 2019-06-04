@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\xtra_lib\bzrintrp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xtra_lib\diag_mat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xtra_lib\filt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xtra_lib\mt19937i.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xtra_lib\nure_svd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\filt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\extra_fn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\xtra_lib\makefile.ami" />
+    <None Include="..\..\xtra_lib\makefile.os2" />
+    <None Include="..\..\xtra_lib\makefile.sas" />
+    <None Include="..\..\xtra_lib\makefile.unx" />
+    <None Include="..\..\xtra_lib\makefile.wce" />
+    <None Include="..\..\xtra_lib\makefile.wnt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{2c841291-a188-4a9e-b15b-b6bbc397bb59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ec7c86b4-e106-4273-bc78-083594606684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0d408582-9e0f-4e50-9ea9-e6e1a58f500e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

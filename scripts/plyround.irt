@@ -1,0 +1,244 @@
+#
+# Rounding of polygonal meshes
+#
+#				Created by Gershon Elber,	Jan. 2015
+#
+
+save_res = resolution;
+
+#################################
+
+Pln1Aux = PlaneSrf( -0.1, 0, 1, 1 );
+Pln1Aux = MaxEdgeLen( triangl( gpolygon( Pln1Aux, 1 ), true ), 0.09 );
+
+Pln2Aux = Pln1Aux * ry( -90 );
+
+ICrv = iritstate( "intercrv", true );
+ICrvs = Pln1Aux * Pln2Aux;
+ICrv = iritstate( "intercrv", false );
+color( ICrvs, red );
+
+Pln1 = Pln1Aux / -Pln2Aux;
+Pln2 = -(Pln2Aux / Pln1Aux);
+
+Pln12 = gpolygon( list( Pln1, Pln2 ), 1 );
+
+RPlns11 = PlyRound( 1, Pln12, nil(), list( TRUE, 100, 1.0, FALSE, 0.0 ) ):
+color( RPlns11, green );
+
+RPlns12 = PlyRound( 1, Pln12, ICrvs, list( TRUE, 100, 1.0, TRUE, 0.2 ) ):
+color( RPlns12, yellow );
+
+RPlns13 = PlyRound( 1, Pln12, ICrvs, list( TRUE, 10, 1.0, TRUE, 1.0 ) ):
+color( RPlns13, cyan );
+
+All1 = list( list( Pln1, Pln2, ICrvs ),
+	     RPlns11 * ty( 1.2 ),
+	     RPlns12 * ty( 2.4 ),
+	     RPlns13 * ty( 3.6 ) );
+
+RPlns31 = PlyRound( 3, list( Pln1, Pln2 ), ICrvs, list( 1, 0.1, 1.0 ) ):
+RPlns31 = gpolygon( RPlns31, true ):
+RPlns31 = smoothnrml( RPlns31, 180 );
+color( RPlns31, green );
+
+RPlns32 = PlyRound( 3, list( Pln1, Pln2 ), ICrvs, list( 1, 0.3, 1.0 ) ):
+RPlns32 = gpolygon( RPlns32, true ):
+RPlns32 = smoothnrml( RPlns32, 180 );
+color( RPlns32, yellow );
+
+RPlns33 = PlyRound( 3, list( Pln1, Pln2 ), ICrvs, list( 1, 0.6, 1.0 ) ):
+RPlns33 = gpolygon( RPlns33, true ):
+RPlns33 = smoothnrml( RPlns33, 180 );
+color( RPlns33, cyan );
+
+All2 = list( list( Pln1, Pln2, ICrvs ),
+	     RPlns31 * ty( 1.2 ),
+	     RPlns32 * ty( 2.4 ),
+	     RPlns33 * ty( 3.6 ) );
+
+All = list( All1 * tx( 1 ),
+	    All2 * tx( -1 ) );
+
+interact( All );
+
+save( "PlyRnd1", All );
+
+free( Pln1 );
+free( Pln2 );
+free( Pln12 );
+free( Pln1Aux );
+free( Pln2Aux );
+free( ICrv );
+free( ICrvs );
+free( RPlns11 );
+free( RPlns12 );
+free( RPlns13 );
+free( RPlns31 );
+free( RPlns32 );
+free( RPlns33 );
+
+#################################
+
+a1 = arc360( vector( 0.0, 0.0, 0.0 ), 1.0, 0, 180 ) +
+     ctlpt( E3, 1.0, 0.0, 0.0 );
+a2 = a1 * tz( 2 );
+
+Mesh = gpolygon( ruledSrf( a2, a1 ) * rx( 90 ) * ty( 1 ), 1 );
+Mesh = MaxEdgeLen( triangl( Mesh, true ), 0.23 );
+color( Mesh, red );
+
+free( a1 );
+free( a2 );
+
+RndMesh = PlyRound( 1, Mesh, nil(), list( TRUE, 100, 1.0, FALSE, 0.4 ) );
+color( RndMesh, green );
+
+All = list( RndMesh * tx( 1.2 ),
+	    Mesh * tx( -1.2 ) );
+
+interact( All );
+
+save( "PlyRnd2", All );
+
+free( Mesh );
+free( RndMesh );
+
+#################################
+
+resolution = 4;
+
+Cyl = MaxEdgeLen( triangl( cylin( vector( 0, 0, -1 ), vector( 0, 0, 1 ), 0.5, 0 ), true ), 0.1 );
+color( Cyl, red );
+
+Cyl1 = PlyRound( 1, Cyl, nil(), list( TRUE, 5, 1.0, TRUE, 0.0 ) );
+Cyl2 = PlyRound( 1, Cyl, nil(), list( TRUE, 20, 1.0, FALSE, 0.0 ) );
+Cyl3 = PlyRound( 1, Cyl, nil(), list( TRUE, 50, 1.0, FALSE, 0.0 ) );
+Cyl4 = PlyRound( 1, Cyl, nil(), list( TRUE, 50, 1.0, FALSE, 0.35 ) );
+Cyl5 = PlyRound( 1, Cyl, nil(), list( TRUE, 100, 1.0, FALSE, 0.2 ) );
+
+color( Cyl1, green );
+color( Cyl2, green );
+color( Cyl3, green );
+color( Cyl4, green );
+color( Cyl5, green );
+
+All = list( Cyl * tx( -3 ),
+	    Cyl1 * tx( -1.5 ),
+	    Cyl2 * tx( 0 ),
+	    Cyl3 * tx(  1.5 ),
+	    Cyl4 * tx(  3 ),
+	    Cyl5 * tx(  4.5 ) );
+
+interact( All );
+
+save( "PlyRnd3", All );
+
+free( Cyl );
+free( Cyl1 );
+free( Cyl2 );
+free( Cyl3 );
+free( Cyl4 );
+free( Cyl5 );
+
+#################################
+
+Cube = MaxEdgeLen( triangl( box( vector( 0, 0, 0 ), 1, 1, 1 ), true ), 0.2 );
+color( Cube, red );
+
+Cube1 = PlyRound( 1, Cube, nil(), list( TRUE, 3, 1.0, TRUE, 0.0 ) );
+Cube2 = PlyRound( 1, Cube, nil(), list( TRUE, 5, 0.5, TRUE, 0.0 ) );
+Cube3 = PlyRound( 1, Cube, nil(), list( TRUE, 10, 1.0, TRUE, 0.0 ) );
+Cube4 = PlyRound( 1, Cube, nil(), list( TRUE, 30, 1.0, TRUE, 0.0 ) );
+
+color( Cube1, green );
+color( Cube2, green );
+color( Cube3, green );
+color( Cube4, green );
+
+All = list( Cube * tx( -3 ),
+	    Cube1 * tx( -1.5 ),
+	    Cube2 * tx( 0 ),
+	    Cube3 * tx( 1.5 ),
+	    Cube4 * tx( 3 ) );
+
+interact( All );
+
+save( "PlyRnd4", All );
+
+free( Cube );
+free( Cube1 );
+free( Cube2 );
+free( Cube3 );
+free( Cube4 );
+
+#################################
+
+resolution = 64;
+
+Spr1t = sphere( vector( 0, 0, 0 ), 1 ) * ry( 50 );
+Spr2t = Spr1t * tx( 1.3 );
+
+ICrv = iritstate( "intercrv", true );
+ICrvs = Spr1t * Spr2t;
+ICrv = iritstate( "intercrv", false );
+color( ICrvs, yellow );
+
+Sprs = Spr1t + Spr2t;
+color( Sprs, red );
+
+RSprs11 = PlyRound( 1, Sprs, ICrvs, list( TRUE, 5, 1.0, TRUE, 0.2 ) );
+RSprs12 = PlyRound( 1, Sprs, ICrvs, list( TRUE, 15, 1.0, TRUE, 0.2 ) );
+RSprs13 = PlyRound( 1, Sprs, ICrvs, list( TRUE, 50, 1.0, TRUE, 0.2 ) );
+
+color( RSprs11, cyan );
+color( RSprs12, cyan );
+color( RSprs13, cyan );
+
+All1 = list( list( axes, Sprs, ICrvs ) * ty( 2 ),
+	     list( RSprs11 * tx( -3.5 ),
+		   RSprs12 * tx( 0 ),
+		   RSprs13 * tx( 3.5 ) ) * ty( -1 ) );
+
+interact( All1 );
+
+Spr1 = Spr1t / Spr2t;
+color( Spr1, magenta );
+Spr2 = Spr2t / Spr1t;
+color( Spr2, red );
+
+RSprs31 = PlyRound( 3, list( Spr1, Spr2 ), ICrvs, list( 1, 0.1, 1.0 ) ):
+RSprs31 = gpolygon( RSprs31, true ):
+RSprs31 = smoothnrml( RSprs31, 180 ):
+color( RSprs31, green );
+
+All2 = list( list( axes, Spr1, Spr2, ICrvs ) * ty( 2 ),
+	     list( RSprs31 * tx( 0 ) ) * ty( -1 ) );
+
+interact( All2 );
+
+All = list( All1 * ty( 3 ), All2 * ty( -3 ) );
+
+free( All1 );
+free( All2 );
+free( Spr1 );
+free( Spr2 );
+free( Spr1t );
+free( Spr2t );
+free( Sprs );
+free( RSprs11 );
+free( RSprs12 );
+free( RSprs13 );
+free( RSprs31 );
+
+save( "PlyRnd5", All );
+
+#################################
+
+resolution = save_res;
+
+#################################
+
+free( ICrv );
+free( ICrvs );
+free( All );

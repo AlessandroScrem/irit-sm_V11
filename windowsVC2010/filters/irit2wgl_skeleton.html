@@ -1,0 +1,344 @@
+<!--
+/****************************************
+ *   WebGL HTML skeleton for irit2wgl   *
+ *   Author: Avi Kaplan.                *
+ ****************************************/
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<head>
+  <title>Irit</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+
+  <script type="text/vertex-shader" id ="vshader">
+/******************************************************
+ *   WebGL GLSL vertex shader skeleton for irit2wgl   *
+ *   Author: Avi Kaplan.                              *
+ ******************************************************/
+
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec2 aVertexTextureUV;
+
+uniform mat4 uMMat;
+uniform mat4 uVMat;
+uniform mat4 uPMat;
+uniform mat3 uNMat;
+
+varying vec3 vPosition;
+varying vec3 vNormal;
+varying vec2 vTextureUV;
+
+void main(void)
+{
+	vec4 position = uMMat * vec4(aVertexPosition, 1);
+	vPosition = position.xyz;
+	vNormal = uNMat * aVertexNormal;
+	vTextureUV = aVertexTextureUV;
+
+	gl_Position = uPMat * uVMat * position;
+}
+  </script>
+
+  <script type="text/fragment-shader" id ="fshader">
+
+/********************************************************
+ *   WebGL GLSL fragment shader skeleton for irit2wgl   *
+ *   Author: Avi Kaplan.                                *
+ ********************************************************/
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+/* Model */
+varying vec3 vPosition;
+varying vec3 vNormal;
+varying vec2 vTextureUV;
+
+uniform vec4 uRGBA;
+
+/* Material */
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 emission;
+	float shininess;
+};
+
+uniform Material uMaterial;
+
+/* Texture */
+uniform bool uApplyTexture;
+uniform sampler2D uSampler;
+
+/* View */
+uniform vec3 uCOP;
+
+/* Light */
+uniform bool uUseLight;
+
+#define LIGHT_SOURCE_NUM (8 + 1)
+
+#define LT_AMBIENT 0
+#define LT_POINT 1
+#define LT_DIRECTIONAL 2
+
+struct Light {
+	int type;
+	bool TL;
+	vec3 pos;
+	vec3 dir;
+	vec3 attK;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+uniform Light uLights[LIGHT_SOURCE_NUM];
+
+vec3 illuminate(Light light, Material material)
+{
+	vec3 intensity = vec3(0, 0, 0);
+
+	vec3 l;
+	float dist, attenuation;
+	if (light.type == LT_AMBIENT) {
+		intensity = light.ambient * material.ambient;
+		return intensity;
+	} else if (light.type == LT_POINT) {
+		l = normalize(light.pos - vPosition);
+		dist = length(light.pos - vPosition);
+		attenuation = 1.0/(light.attK[0] + light.attK[1]*dist +
+			light.attK[2]*dist*dist);
+	} else {	// LT_DIRECTIONAL
+		l = normalize(-light.dir);
+		attenuation = 1.0;
+	}	
+
+	vec3 n = normalize(vNormal);
+	vec3 v = normalize(uCOP - vPosition);
+	
+	float dotDiffuse;
+	if (light.TL)
+		dotDiffuse = abs(dot(n, l));
+	else
+		dotDiffuse = max(dot(n, l), 0.0);
+	vec3 diffuse = dotDiffuse * (light.diffuse * material.diffuse);
+		
+	vec3 h = normalize(l + v);
+	float dotSpecular = abs(dot(n, h));
+	vec3 specular = pow(dotSpecular, material.shininess) *
+	(light.specular * material.specular);
+				
+	intensity += attenuation*(diffuse + specular);
+	
+	return intensity;
+}
+
+void main(void)
+{	
+	vec3 RGB = uRGBA.rgb;
+	Material material = uMaterial;
+
+	if (uApplyTexture) {
+		vec4 textureRGBA
+			= texture2D(uSampler, vec2(vTextureUV.s, vTextureUV.t));
+		RGB = textureRGBA.rgb;
+		material.ambient = RGB;
+		material.diffuse = RGB;
+	}
+
+	if (uUseLight) {
+		vec3 intensity = vec3(0, 0, 0);
+		for (int i = 0; i < LIGHT_SOURCE_NUM; i++)
+			intensity += illuminate(uLights[i], material);
+
+		gl_FragColor = vec4(intensity + material.emission, uRGBA.a);
+	} else {
+		gl_FragColor = vec4(RGB, uRGBA.a);
+	}
+}
+  </script>
+<!-- Dump: scripts -->
+</head>
+
+<body onload="init();" onbeforeunload="destroy();">
+
+  <table id="main">
+
+    <tr>
+      <td id="control-data">
+        <form name="control" id="control">
+          <b>Menu</b>
+          <input type="button" name="control" id="menu-view"/>
+          <b>Status</b>
+          <input type="button" name="control" id="status-view"/>
+        </form>
+      </td>
+    </tr>
+
+    <tr>
+      <td id="canvas">
+<!-- Dump: canvas -->
+      </td>
+
+      <td id="menu-data">
+        <table style="border: none">
+
+          <tr>
+            <td class="menu-entry">
+              <b class="menu-entry-h">Scene</b>
+              <form name="scene" id="scene">
+                Axes
+                <input type="checkbox" name="scene" id="scene-axes"/>
+                Depth
+                <input type="checkbox" name="scene" id="scene-depth"/>
+                Picking
+                <input type="checkbox" name="scene" id="scene-picking"/>
+              </form>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="menu-entry">
+              <b class="menu-entry-h">Model</b>
+              <form name="model" id="model">
+                Axes
+                <input type="checkbox" name="model" id="model-axes"/>
+              </form>
+
+              <form name="dm" id="model-drawmode">
+                Wire
+                <input type="checkbox" name="dm" id="model-dm-wire"/>
+                Solid
+                <input type="checkbox" name="dm" id="model-dm-solid"/>
+                Texture
+                <input type="checkbox" name="dm" id="model-dm-texture"/>
+              </form>
+
+              <form name="trans" id="model-trans">
+                World trans.
+                <input type="radio" name="trans" id="model-trans-world"/>
+                Object trans.
+                <input type="radio" name="trans" id="model-trans-object"/>
+              </form>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="menu-entry">
+              <b class="menu-entry-h">Camera</b>
+              <form name="view" id="camera-view">
+                View
+                <select name="view" id="camera-view-which">
+                  <option value="0">Original</option>
+                  <option value="1">Front</option>
+                  <option value="2">Back</option>
+                  <option value="3">Right</option>
+                  <option value="4">Left</option>
+                  <option value="5">Top</option>
+                  <option value="6">Bottom</option>
+                </select>
+              </form>
+
+               <form name="pm" id="camera-projmode">
+                Orthogonal
+                <input type="radio" name="pm" id="camera-pm-orthogonal"/>
+                Perspective
+                <input type="radio" name="pm" id="camera-pm-perspective"/>
+              </form>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="menu-entry">
+              <b class="menu-entry-h">Light</b>
+              <form name="ambient">
+                Global Ambient
+                <input type="range" name="global-ambient" id="light-ambient"
+                min="0" max="255" step="1"/>
+              </form>
+
+              </br>
+
+              <form name="src" id="light-src">
+                Light Source
+                <select name="src" id="light-src-which">
+                  <option value="1">Source 1</option>
+                  <option value="2">Source 2</option>
+                  <option value="3">Source 3</option>
+                  <option value="4">Source 4</option>
+                  <option value="5">Source 5</option>
+                  <option value="6">Source 6</option>
+                  <option value="7">Source 7</option>
+                  <option value="8">Source 8</option>
+                </select>
+                Visible
+                <input type="checkbox" name="src" id="light-src-visible"/>
+              </form>
+
+              <form name="type" id="light-type">
+                Point
+                <input type="radio" name="type" id="light-type-point"/>
+                Directional
+                <input type="radio" name="type" id="light-type-directional"/>
+                2 Lights
+                <input type="checkbox" name="TL" id="light-TL"/>
+              </form>
+
+              <form name="pos" id="light-pos">
+                <input type="button" name="pos" id="light-pos-set"
+                value="Set"/>
+                X:
+                <input type="text" name="pos" id="light-pos-X" size="1"/>
+                Y:
+                <input type="text" name="pos" id="light-pos-Y" size="1"/>
+                Z:
+                <input type="text" name="pos" id="light-pos-Z" size="1"/>
+              </form>
+
+              <form name="dir" id="light-dir">
+                <input type="button" name="dir" id="light-dir-set"
+                value="Set"/>
+                X:
+                <input type="text" name="dir" id="light-dir-X" size="1"/>
+                Y:
+                <input type="text" name="dir" id="light-dir-Y" size="1"/>
+                Z:
+                <input type="text" name="dir" id="light-dir-Z" size="1"/>
+              </form>
+
+              <form name="intens" id="light-intens">
+                <br/>Diffuse
+                <input type="range" name="intens" id="light-intens-diffuse"
+                min="0" max="255" step="1"/>
+                <br/>Specular
+                <input type="range" name="intens" id="light-intens-specular"
+                min="0" max="255" step="1"/>
+              </form>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td id="status-data">
+        <form name="status" id="status">
+          <textarea name="status" id="status-log" wrap="hard" readonly="yes">
+          </textarea>
+        </form>
+      </td>
+    </tr>
+  </table>
+
+</body>
+
+</html>
